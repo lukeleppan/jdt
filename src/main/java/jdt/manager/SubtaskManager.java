@@ -10,51 +10,47 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manager for subtasks. Linking to the subtask table in the database.
+ * 
+ * @author Luke Leppan
+ */
 public class SubtaskManager {
 
-    private DBConnection DBCon = new DBConnection();
+    private final DBConnection dbCon = new DBConnection();
 
-    public boolean CreateSubtask(int taskID, String title) {
-        boolean success = false;
-
-        try {
-            if (DBCon.update(
-                    "INSERT INTO tblSubtasks (taskID, subtaskTitle, subtaskCompleted) "
-                    + "VALUES ("
-                    + taskID + ", '"
-                    + title + "', false);"
-            ) == 1) {
-                success = true;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Something Went Wrong!");
-            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return success;
+    /**
+     * Create a subtask.
+     * 
+     * @param taskID The task ID.
+     * @param title  The subtask title.
+     * @return -1 if the subtask was not created, otherwise 1.
+     */
+    public int createSubtask(int taskID, String title) {
+        return dbCon.update("INSERT INTO subtasks (taskID, subtaskTitle, subtaskCompleted) VALUES (?, ?, false);",
+                new String[] { String.valueOf(taskID), title });
     }
 
-    public List<Subtask> GetTaskSubtasks(Task currentTask) {
-        List<Subtask> projectTaskList = new ArrayList();
+    /**
+     * Get a list of subtasks for a task.
+     * 
+     * @param currentTask the task to get subtasks for.
+     * @return a list of subtasks for the given task.
+     */
+    public List<Subtask> getTaskSubtasks(Task currentTask) {
+        List<Subtask> subtaskList = new ArrayList<>();
 
-        try (ResultSet rs = DBCon.query("SELECT * FROM tblTasks WHERE projectID = " + currentTask.getProjectID())) {
-
+        try (ResultSet rs = dbCon.query("SELECT * FROM subtasks WHERE taskID = ?;",
+                new String[] { String.valueOf(currentTask.getTaskID()) })) {
             while (rs.next()) {
-                Subtask subtask = new Subtask(
-                        rs.getInt("subtaskID"),
-                        rs.getInt("taskID"),
-                        rs.getString("subtaskTitle"),
-                        rs.getBoolean("subtaskCompleted")
-                );
-                projectTaskList.add(subtask);
+                Subtask subtask = new Subtask(rs.getInt("subtaskID"), rs.getInt("taskID"), rs.getString("subtaskTitle"),
+                        rs.getBoolean("subtaskCompleted"));
+                subtaskList.add(subtask);
             }
-            rs.close();
-
         } catch (SQLException ex) {
-            System.out.println("Something Went Wrong!");
-            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubtaskManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return projectTaskList;
+        return subtaskList;
     }
 }

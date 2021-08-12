@@ -3,7 +3,6 @@ package jdt.manager;
 import jdt.data.DBConnection;
 import jdt.data.Project;
 import jdt.data.Task;
-import jdt.data.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,52 +10,48 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manager for tasks. Linking to the tasks table in the database.
+ */
 public class TaskManager {
 
-    private DBConnection DBCon = new DBConnection();
+    private final DBConnection dbCon = new DBConnection();
 
-    public boolean CreateTask(int projectID, String title, String description) {
-        boolean success = false;
-
-        try {
-            if (DBCon.update(
-                    "INSERT INTO tblTasks (projectID, taskTitle, taskDescription, taskState) "
-                    + "VALUES ("
-                    + projectID + ", '"
-                    + title + "', '"
-                    + description
-                    + "', 'TODO');"
-            ) == 1) {
-                success = true;
-            }
-        } catch (SQLException ex) {
-            System.out.println("Something Went Wrong!");
-            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return success;
+    /**
+     * Create a new task.
+     * 
+     * @param projectID   ID of the project to which the new task will be added.
+     * @param title       Title of the task.
+     * @param description Description of the task.
+     * 
+     * @return -1 if the task could not be created, otherwise 1.
+     */
+    public int createTask(int projectID, String title, String description) {
+        return dbCon.update(
+                "INSERT INTO tasks (projectID, taskTitle, taskDescription, taskState) VALUES (?, ?, ?, 'TODO');",
+                new String[] { String.valueOf(projectID), title, description });
     }
 
-    public List<Task> GetProjectTask(Project currentProject, String taskState) {
-        List<Task> projectTaskList = new ArrayList();
+    /**
+     * Get a list of all tasks in a project.
+     * 
+     * @param currentProject The project for which the tasks should be returned.
+     * @param taskState      The state of the tasks.
+     * 
+     * @return A list of all tasks in the project.
+     */
+    public List<Task> getProjectTask(Project currentProject, String taskState) {
+        List<Task> projectTaskList = new ArrayList<>();
 
-        try (ResultSet rs = DBCon.query("SELECT * FROM tblTasks WHERE projectID = " + currentProject.getProjectID())) {
-
+        try (ResultSet rs = dbCon.query("SELECT * FROM tblTasks WHERE projectID = ?;",
+                new String[] { String.valueOf(currentProject.getProjectID()) })) {
             while (rs.next()) {
-                Task task = new Task(
-                        rs.getInt("taskID"),
-                        rs.getInt("projectID"),
-                        rs.getString("taskTitle"),
-                        rs.getString("taskDescription"),
-                        rs.getString("taskState")
-                );
+                Task task = new Task(rs.getInt("taskID"), rs.getInt("projectID"), rs.getString("taskTitle"),
+                        rs.getString("taskDescription"), rs.getString("taskState"));
                 projectTaskList.add(task);
             }
-            rs.close();
-
         } catch (SQLException ex) {
-            System.out.println("Something Went Wrong!");
-            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TaskManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return projectTaskList;

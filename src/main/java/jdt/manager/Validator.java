@@ -1,27 +1,27 @@
 package jdt.manager;
 
-import jdt.manager.UserManager;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.*;
 
 public class Validator {
 
-  private String firstname;
-  private String surname;
-  private String username;
-  private String email;
-  private Date DOB;
-  private char[] password;
-  private char[] repeatPassword;
-  private int passScore;
+  private final String firstname;
+  private final String surname;
+  private final String username;
+  private final String email;
+  private final Date dob;
+  private final char[] password;
+  private final char[] repeatPassword;
+  private final int passScore;
 
-  public Validator(String firstname, String surname, String username, String email, Date DOB, char[] password, char[] repeatPassword, int passScore) {
+  public Validator(String firstname, String surname, String username, String email, Date dob, char[] password,
+      char[] repeatPassword, int passScore) {
     this.firstname = firstname;
     this.surname = surname;
     this.username = username;
     this.email = email;
-    this.DOB = DOB;
+    this.dob = dob;
     this.password = password;
     this.repeatPassword = repeatPassword;
     this.passScore = passScore;
@@ -70,7 +70,8 @@ public class Validator {
   public boolean validateUsername() {
     boolean valid = true;
 
-    Pattern usernamePatten = Pattern.compile("^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,25}$", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    Pattern usernamePatten = Pattern.compile("^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,25}$",
+        Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
     Matcher usernameMatcher = usernamePatten.matcher(username);
 
     if (!usernameMatcher.find()) {
@@ -116,7 +117,7 @@ public class Validator {
   public boolean validateDOB() {
     boolean valid = true;
 
-    if (DOB == null) {
+    if (dob == null) {
       valid = false;
     }
 
@@ -126,7 +127,7 @@ public class Validator {
   public boolean validateDOBLogic() {
     boolean valid = true;
 
-    if (DOB.after(new Date())) {
+    if (dob.after(new Date())) {
       valid = false;
     }
 

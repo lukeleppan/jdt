@@ -13,23 +13,19 @@ import java.util.logging.Logger;
 
 public class UserManager {
 
-  private DBConnection DBCon = new DBConnection();
+  private final DBConnection dbCon = new DBConnection();
 
-  public boolean CheckForUser(String username) {
+  public boolean checkForUser(String username) {
     boolean exists = false;
 
-    try (ResultSet rs = DBCon.query("SELECT * FROM tblUserCreds");) {
-      List<UserCreds> userCredsShareableList = new ArrayList();
+    try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[] {})) {
+
+      List<UserCreds> userCredsShareableList = new ArrayList<>();
 
       while (rs.next()) {
-        UserCreds userCred = new UserCreds(
-                rs.getInt("UserCredID"),
-                rs.getString("Username"),
-                rs.getString("Password")
-        );
+        UserCreds userCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"), rs.getString("password"));
         userCredsShareableList.add(userCred);
       }
-      rs.close();
 
       for (int i = 0; i < userCredsShareableList.size(); i++) {
         if (userCredsShareableList.get(i).getUsername().equals(username)) {
@@ -37,91 +33,69 @@ public class UserManager {
         }
       }
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     return exists;
   }
 
-  public boolean RegisterUser(User user, UserCreds userCreds) {
+  public boolean registerUser(User user, UserCreds userCreds) {
     boolean success = false;
-    int UserID = 0;
-    try {
-      DBCon.update(
-              "INSERT INTO tblUserCreds (Username, Password) "
-              + "VALUES ('" + userCreds.getUsername() + "', '" + userCreds.getPassword() + "');"
-      );
-    } catch (SQLException ex) {
-      Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    int userID = 0;
 
-    List<UserCreds> userCredsShareableList = new ArrayList();
-    try {
-      ResultSet rs = DBCon.query("SELECT * FROM tblUserCreds");
+    PasswordAuth pwAuth = new PasswordAuth();
 
+    dbCon.update("INSERT INTO usercreds (username, password) VALUES (?, ?);",
+        new String[] { userCreds.getUsername(), pwAuth.hash(userCreds.getPassword().toCharArray()) });
+
+    List<UserCreds> userCredsShareableList = new ArrayList<>();
+
+    try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[] {})) {
       while (rs.next()) {
-        UserCreds userCred = new UserCreds(
-                rs.getInt("UserCredID"),
-                rs.getString("Username"),
-                rs.getString("Password")
-        );
+        UserCreds userCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"), rs.getString("password"));
         userCredsShareableList.add(userCred);
       }
-
-      rs.close();
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
     }
+
     for (int i = 0; i < userCredsShareableList.size(); i++) {
       if (userCredsShareableList.get(i).getUsername().equals(userCreds.getUsername())) {
-        UserID = userCredsShareableList.get(i).getUserCredID();
+        userID = userCredsShareableList.get(i).getUserCredID();
       }
     }
 
-    try {
-      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      String dateStr = simpleDateFormat.format(user.getUserDOB());
-      String query = "INSERT INTO tblUsers "
-              + "VALUES (" + UserID + ", '"
-              + user.getUserEmail()
-              + "', #" + dateStr + "#, '"
-              + user.getUserFirstName() + "', '"
-              + user.getUserSurname() + "');";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    String dateStr = simpleDateFormat.format(user.getUserDOB());
 
-      if (DBCon.update(query) == 1) {
-        success = true;
-      }
+    int res = dbCon.update("INSERT INTO tblUsers VALUES (?, ?, #?#, ?, ?);", new String[] { String.valueOf(userID),
+        user.getUserEmail(), dateStr, user.getUserFirstName(), user.getUserSurname() });
 
-    } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
-      Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+    if (res != -1) {
+      success = true;
     }
 
     return success;
   }
 
-  public boolean LoginUser(String username, String password) {
+  public boolean loginUser(String username, String password) {
     boolean success = false;
+    PasswordAuth pwAuth = new PasswordAuth();
 
-    List<UserCreds> userCredsShareableList = new ArrayList();
-    try (ResultSet rs = DBCon.query("SELECT * FROM tblUserCreds")) {
+    List<UserCreds> userCredsShareableList = new ArrayList<>();
+    try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[] {})) {
       while (rs.next()) {
-        UserCreds tempUserCred = new UserCreds(
-                rs.getInt("UserCredID"),
-                rs.getString("Username"),
-                rs.getString("Password")
-        );
+        UserCreds tempUserCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"),
+            rs.getString("password"));
         userCredsShareableList.add(tempUserCred);
       }
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     for (int i = 0; i < userCredsShareableList.size(); i++) {
-      if (userCredsShareableList.get(i).getUsername().equals(username) && userCredsShareableList.get(i).getPassword().equals(password)) {
+      if (userCredsShareableList.get(i).getUsername().equals(username)
+          && pwAuth.authenticate(password.toCharArray(), userCredsShareableList.get(i).getPassword())) {
         success = true;
       }
     }
@@ -131,76 +105,47 @@ public class UserManager {
 
   public User getUser(String username) {
     User user = null;
-    int UserID = -1;
-    List<UserCreds> userCredsShareableList = new ArrayList();
-    try (ResultSet rs = DBCon.query("SELECT * FROM tblUserCreds")) {
+    int userID = -1;
+    List<UserCreds> userCredsShareableList = new ArrayList<>();
+    try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[] {})) {
       while (rs.next()) {
-        UserCreds tempUserCred = new UserCreds(
-                rs.getInt("UserCredID"),
-                rs.getString("Username"),
-                rs.getString("Password")
-        );
+        UserCreds tempUserCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"),
+            rs.getString("password"));
         userCredsShareableList.add(tempUserCred);
       }
 
       for (int i = 0; i < userCredsShareableList.size(); i++) {
         if (userCredsShareableList.get(i).getUsername().equals(username)) {
-          UserID = userCredsShareableList.get(i).getUserCredID();
+          userID = userCredsShareableList.get(i).getUserCredID();
         }
       }
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    List<User> userShareableList = new ArrayList();
-    try (ResultSet rs = DBCon.query("SELECT * FROM tblUsers")) {
+    List<User> userShareableList = new ArrayList<>();
+    try (ResultSet rs = dbCon.query("SELECT * FROM users;", new String[] {})) {
       while (rs.next()) {
-        User tempUser = new User(
-                rs.getInt("UserID"),
-                rs.getString("email"),
-                rs.getDate("DOB"),
-                rs.getString("firstname"),
-                rs.getString("surname")
-        );
+        User tempUser = new User(rs.getInt("userID"), rs.getString("email"), rs.getDate("dob"),
+            rs.getString("firstname"), rs.getString("surname"));
         userShareableList.add(tempUser);
       }
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     for (int i = 0; i < userShareableList.size(); i++) {
-      if (userShareableList.get(i).getUserID() == UserID) {
-        user = new User(
-                userShareableList.get(i).getUserID(),
-                userShareableList.get(i).getUserEmail(),
-                userShareableList.get(i).getUserDOB(),
-                userShareableList.get(i).getUserFirstName(),
-                userShareableList.get(i).getUserSurname()
-        );
+      if (userShareableList.get(i).getUserID() == userID) {
+        user = new User(userShareableList.get(i).getUserID(), userShareableList.get(i).getUserEmail(),
+            userShareableList.get(i).getUserDOB(), userShareableList.get(i).getUserFirstName(),
+            userShareableList.get(i).getUserSurname());
       }
     }
 
     return user;
   }
 
-  public boolean deleteAccount(String username) {
-    boolean success = true;
-    int numCheck = 0;
-
-    try {
-      numCheck = DBCon.update("DELETE * FROM tblUserCreds WHERE Username = " + username);
-    } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
-      Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    if (numCheck == 1) {
-      success = true;
-    }
-
-    return success;
+  public int deleteAccount(String username) {
+    return dbCon.update("DELETE * FROM usercreds WHERE username = ?;", new String[] { username });
   }
-
 }

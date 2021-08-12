@@ -10,70 +10,60 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manager for projects. Linking to the projects table in the database.
+ */
 public class ProjectManager {
 
-  private DBConnection DBCon = new DBConnection();
+  private final DBConnection dbCon = new DBConnection();
 
-  public boolean CreateProject(String title, String description, User currentUser) {
-    boolean success = false;
-
-    try {
-      if (DBCon.update(
-              "INSERT INTO tblProjects (userID, projectTitle, projectDescription) "
-              + "VALUES ("
-              + currentUser.getUserID() + ", '"
-              + title + "', '"
-              + description + "');"
-      ) == 1) {
-        success = true;
-      }
-    } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
-      Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    return success;
+  /**
+   * Create a new project.
+   * 
+   * @param title       Title of the project.
+   * @param description Description of the project.
+   * @param currentUser current user.
+   * 
+   * @return -1 if the subtask was not created, otherwise 1.
+   */
+  public int createProject(String title, String description, User currentUser) {
+    return dbCon.update("INSERT INTO projects (userID, projectTitle, projectDescription) VALUES (?, ?, ?);",
+        new String[] { String.valueOf(currentUser.getUserID()), title, description });
   }
 
-  public List<Project> GetUserProjects(User currentUser) {
-    List<Project> userProjectList = new ArrayList();
+  /**
+   * Get a list of all projects for a user.
+   * 
+   * @param currentUser current user.
+   * 
+   * @return a list of all projects for a user.
+   */
+  public List<Project> getUserProjects(User currentUser) {
+    List<Project> userProjectList = new ArrayList<>();
 
-    try (ResultSet rs = DBCon.query("SELECT * FROM tblProjects WHERE userID = " + currentUser.getUserID())) {
-
+    try (ResultSet rs = dbCon.query("SELECT * FROM projects WHERE userID = ?;",
+        new String[] { String.valueOf(currentUser.getUserID()) })) {
       while (rs.next()) {
-        Project project = new Project(
-                rs.getInt("ProjectID"),
-                rs.getInt("userID"),
-                rs.getString("projectTitle"),
-                rs.getString("projectDescription")
-        );
+        Project project = new Project(rs.getInt("projectID"), rs.getInt("userID"), rs.getString("projectTitle"),
+            rs.getString("projectDescription"));
         userProjectList.add(project);
       }
-      rs.close();
-
     } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
       Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     return userProjectList;
   }
 
-  public boolean DeleteProject(Project project) {
-    boolean success = false;
-
-    try {
-      if (DBCon.update(
-              "DELETE FROM tblProjects "
-              + "WHERE ProjectID = "
-              + project.getProjectID()) == 1) {
-        success = true;
-      }
-    } catch (SQLException ex) {
-      System.out.println("Something Went Wrong!");
-      Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    return success;
+  /**
+   * Delete a project.
+   * 
+   * @param project Project to delete.
+   * 
+   * @return -1 if the project was not deleted.
+   */
+  public int deleteProject(Project project) {
+    return dbCon.update("DELETE FROM projects WHERE projectID = ?;",
+        new String[] { String.valueOf(project.getProjectID()) });
   }
 }

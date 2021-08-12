@@ -56,27 +56,20 @@ public class SubtaskTile extends javax.swing.JPanel {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlScrollWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox1)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlScrollWrapper, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jCheckBox1)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(pnlScrollWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jCheckBox1)
+                        .addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(pnlScrollWrapper, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createSequentialGroup().addGap(15, 15, 15).addComponent(jCheckBox1).addContainerGap(14,
+                        Short.MAX_VALUE)));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtaTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtaTitleMouseClicked
+    private void txtaTitleMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_txtaTitleMouseClicked
 
-    }//GEN-LAST:event_txtaTitleMouseClicked
+    }// GEN-LAST:event_txtaTitleMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBox1;

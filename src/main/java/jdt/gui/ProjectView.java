@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jdt.gui;
 
 import jdt.data.Project;
@@ -16,79 +11,79 @@ import javax.swing.JFrame;
 
 public class ProjectView extends javax.swing.JFrame {
 
-    private Project project;
+	private Project project;
 
-    public ProjectView(Project project) {
-        initComponents();
-        this.setTitle(project.getProjectTitle());
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	public ProjectView(Project project) {
+		initComponents();
+		this.setTitle(project.getProjectTitle());
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/jdt/images/logo.png"));
-        this.setIconImage(icon.getImage());
+		ImageIcon icon = new ImageIcon(getClass().getResource("/jdt/images/logo.png"));
+		this.setIconImage(icon.getImage());
 
-        this.project = project;
-        refreshTaskList();
+		this.project = project;
+		refreshTaskList();
 
-    }
+	}
 
-    private void refreshTaskList() {
-        pnlScrollWrapper.getVerticalScrollBar().setUnitIncrement(16);
+	private void refreshTaskList() {
+		pnlScrollWrapper.getVerticalScrollBar().setUnitIncrement(16);
 
-        TaskManager taskManager = new TaskManager();
-        List<Task> TODOTasks = taskManager.GetProjectTask(project, "TODO");
-        List<Task> DoingTasks = taskManager.GetProjectTask(project, "Doing");
-        List<Task> DoneTasks = taskManager.GetProjectTask(project, "Done");
+		TaskManager taskManager = new TaskManager();
+		List<Task> TODOTasks = taskManager.getProjectTask(project, "TODO");
+		List<Task> DoingTasks = taskManager.getProjectTask(project, "Doing");
+		List<Task> DoneTasks = taskManager.getProjectTask(project, "Done");
 
-        // TODO List Stuff
-        for (int i = 0; i < pnlTODOList.getComponentCount(); i++) {
-            if (i > 0) {
-                pnlTODOList.remove(i);
-            }
-        }
-        pnlTODOList.invalidate();
-        pnlTODOList.validate();
-        pnlTODOList.repaint();
-        Dimension preferredSizeTODO = new Dimension(242, (70 * TODOTasks.size()) + 50);
-        pnlTODOList.setPreferredSize(preferredSizeTODO);
-        for (int i = 0; i < TODOTasks.size(); i++) {
-            Task task = TODOTasks.get(i);
-            TaskTile tile = new TaskTile(task);
+		// TODO List Stuff
+		for (int i = 0; i < pnlTODOList.getComponentCount(); i++) {
+			if (i > 0) {
+				pnlTODOList.remove(i);
+			}
+		}
+		pnlTODOList.invalidate();
+		pnlTODOList.validate();
+		pnlTODOList.repaint();
+		Dimension preferredSizeTODO = new Dimension(242, (70 * TODOTasks.size()) + 50);
+		pnlTODOList.setPreferredSize(preferredSizeTODO);
+		for (int i = 0; i < TODOTasks.size(); i++) {
+			Task task = TODOTasks.get(i);
+			TaskTile tile = new TaskTile(task);
 
-            tile.setSize(220, 60);
-            tile.setLocation(10, 50 + 70 * i);
-            tile.setVisible(true);
+			tile.setSize(220, 60);
+			tile.setLocation(10, 50 + 70 * i);
+			tile.setVisible(true);
 
-            pnlTODOList.add(tile);
-        }
-        pnlTODOList.invalidate();
-        pnlTODOList.validate();
-        pnlTODOList.repaint();
-        // ----------------------------------------------------------------
+			pnlTODOList.add(tile);
+		}
+		pnlTODOList.invalidate();
+		pnlTODOList.validate();
+		pnlTODOList.repaint();
+		// ----------------------------------------------------------------
 
-        for (int i = 0; i < pnlDoingList.getComponentCount(); i++) {
-            if (i > 0) {
-                pnlDoingList.remove(i);
-            }
-        }
-        pnlDoingList.invalidate();
-        pnlDoingList.validate();
-        pnlDoingList.repaint();
-        Dimension preferredSizeDoing = new Dimension(242, (70 * DoingTasks.size()) + 50);
-        pnlTODOList.setPreferredSize(preferredSizeDoing);
+		for (int i = 0; i < pnlDoingList.getComponentCount(); i++) {
+			if (i > 0) {
+				pnlDoingList.remove(i);
+			}
+		}
+		pnlDoingList.invalidate();
+		pnlDoingList.validate();
+		pnlDoingList.repaint();
+		Dimension preferredSizeDoing = new Dimension(242, (70 * DoingTasks.size()) + 50);
+		pnlTODOList.setPreferredSize(preferredSizeDoing);
 
-        for (int i = 0; i < pnlDoneList.getComponentCount(); i++) {
-            if (i > 0) {
-                pnlDoneList.remove(i);
-            }
-        }
-        pnlDoneList.invalidate();
-        pnlDoneList.validate();
-        pnlDoneList.repaint();
+		for (int i = 0; i < pnlDoneList.getComponentCount(); i++) {
+			if (i > 0) {
+				pnlDoneList.remove(i);
+			}
+		}
+		pnlDoneList.invalidate();
+		pnlDoneList.validate();
+		pnlDoneList.repaint();
 
-    }
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -311,12 +306,12 @@ public class ProjectView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTaskActionPerformed
-        TaskAdd taskAdd = new TaskAdd(this.project);
-        taskAdd.setVisible(true);
+		TaskAdd taskAdd = new TaskAdd(this.project);
+		taskAdd.setVisible(true);
     }//GEN-LAST:event_btnAddTaskActionPerformed
 
     private void btnRefreshTaskListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshTaskListActionPerformed
-        refreshTaskList();
+		refreshTaskList();
     }//GEN-LAST:event_btnRefreshTaskListActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
