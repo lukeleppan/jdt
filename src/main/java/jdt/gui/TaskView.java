@@ -82,7 +82,7 @@ public final class TaskView extends javax.swing.JFrame {
 		tableColumnModel.getColumn(1).setPreferredWidth(25);
 		tblSubtaskList.setColumnModel(tableColumnModel);
 
-		jScrollPane1.setPreferredSize(new Dimension(
+		pnlSubtaskListScroll.setPreferredSize(new Dimension(
 				355,
 				(tblSubtaskList.getRowHeight() * tblSubtaskList.getRowCount()) + 15
 		));
@@ -100,10 +100,10 @@ public final class TaskView extends javax.swing.JFrame {
         pnlScrollWrapper = new javax.swing.JScrollPane();
         txtaDescription = new javax.swing.JTextArea();
         pnlSubtaskList = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        pnlHeaderSubtaskList = new javax.swing.JPanel();
+        lblSubtaskTitle = new javax.swing.JLabel();
+        btnAddSubtask = new javax.swing.JButton();
+        pnlSubtaskListScroll = new javax.swing.JScrollPane();
         tblSubtaskList = new javax.swing.JTable();
         pnlRightPane = new javax.swing.JPanel();
         btnToggleTODO = new javax.swing.JRadioButton();
@@ -151,35 +151,35 @@ public final class TaskView extends javax.swing.JFrame {
 
         pnlSubtaskList.setPreferredSize(new java.awt.Dimension(366, 201));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setText("Subtasks");
+        lblSubtaskTitle.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblSubtaskTitle.setText("Subtasks");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
-        jButton1.setText("Add a Subtask");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAddSubtask.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
+        btnAddSubtask.setText("Add a Subtask");
+        btnAddSubtask.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAddSubtaskActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlHeaderSubtaskListLayout = new javax.swing.GroupLayout(pnlHeaderSubtaskList);
+        pnlHeaderSubtaskList.setLayout(pnlHeaderSubtaskListLayout);
+        pnlHeaderSubtaskListLayout.setHorizontalGroup(
+            pnlHeaderSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHeaderSubtaskListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblSubtaskTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnAddSubtask)
                 .addContainerGap())
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        pnlHeaderSubtaskListLayout.setVerticalGroup(
+            pnlHeaderSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHeaderSubtaskListLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                .addGroup(pnlHeaderSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSubtaskTitle)
+                    .addComponent(btnAddSubtask))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -206,7 +206,7 @@ public final class TaskView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblSubtaskList);
+        pnlSubtaskListScroll.setViewportView(tblSubtaskList);
 
         javax.swing.GroupLayout pnlSubtaskListLayout = new javax.swing.GroupLayout(pnlSubtaskList);
         pnlSubtaskList.setLayout(pnlSubtaskListLayout);
@@ -216,17 +216,17 @@ public final class TaskView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSubtaskListLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlSubtaskListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 2, Short.MAX_VALUE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(pnlHeaderSubtaskList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pnlSubtaskListLayout.setVerticalGroup(
             pnlSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSubtaskListLayout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlHeaderSubtaskList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addComponent(pnlSubtaskListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnlLeftPaneLayout = new javax.swing.GroupLayout(pnlLeftPane);
@@ -355,23 +355,23 @@ public final class TaskView extends javax.swing.JFrame {
 	}// GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddSubtask;
     private javax.swing.JPanel btnTaskDetailPane;
     private javax.swing.JRadioButton btnToggleDoing;
     private javax.swing.JRadioButton btnToggleDone;
     private javax.swing.JRadioButton btnToggleTODO;
     private javax.swing.ButtonGroup btngState;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSubtaskTitle;
     private javax.swing.JPanel pnlBottomPane;
+    private javax.swing.JPanel pnlHeaderSubtaskList;
     private javax.swing.JPanel pnlLeftPane;
     private javax.swing.JScrollPane pnlLeftPaneScroll;
     private javax.swing.JPanel pnlRightPane;
     private javax.swing.JScrollPane pnlScrollWrapper;
     private javax.swing.JPanel pnlSubtaskList;
+    private javax.swing.JScrollPane pnlSubtaskListScroll;
     private javax.swing.JTable tblSubtaskList;
     private javax.swing.JTextField txtTitle;
     private javax.swing.JTextArea txtaDescription;
