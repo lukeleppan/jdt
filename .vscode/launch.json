@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch MainForm",
+      "request": "launch",
+      "mainClass": "jdt.gui.MainForm",
+      "projectName": "JustDoItProjectManager"
+    }
+  ]
+}
