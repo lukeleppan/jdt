@@ -5,15 +5,17 @@ import jdt.data.Task;
 public class TaskTile extends javax.swing.JPanel {
 
 	private Task task;
+	private ProjectView context;
 
-	public TaskTile(Task task) {
+	public TaskTile(Task task, ProjectView context) {
 		initComponents();
 		this.txtaTitle.setText(task.getTaskTitle());
 		this.task = task;
+		this.context = context;
 	}
 
 	private void openTask() {
-		TaskView taskView = new TaskView(this.task);
+		TaskView taskView = new TaskView(this.task, this.context);
 		taskView.setVisible(true);
 	}
 

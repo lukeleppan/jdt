@@ -9,33 +9,33 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-public class ProjectView extends javax.swing.JFrame {
+public final class ProjectView extends javax.swing.JFrame {
 
-	private Project project;
+	private final Project project;
+	private final TaskManager taskManager;
 
 	public ProjectView(Project project) {
 		initComponents();
 		this.setTitle(project.getProjectTitle());
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.pnlScrollWrapper.getVerticalScrollBar().setUnitIncrement(16);
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("/jdt/images/logo.png"));
 		this.setIconImage(icon.getImage());
 
 		this.project = project;
-		refreshTaskList();
+		this.taskManager = new TaskManager();
 
+		this.refreshTaskList();
 	}
 
-	private void refreshTaskList() {
-		pnlScrollWrapper.getVerticalScrollBar().setUnitIncrement(16);
+	public void refreshTaskList() {
+		List<Task> TODOTasks = this.taskManager.getProjectTask(project, "TODO");
+		List<Task> DoingTasks = this.taskManager.getProjectTask(project, "Doing");
+		List<Task> DoneTasks = this.taskManager.getProjectTask(project, "Done");
 
-		TaskManager taskManager = new TaskManager();
-		List<Task> TODOTasks = taskManager.getProjectTask(project, "TODO");
-		List<Task> DoingTasks = taskManager.getProjectTask(project, "Doing");
-		List<Task> DoneTasks = taskManager.getProjectTask(project, "Done");
-
-		// TODO List Stuff
+		// TODO List Refresh
 		for (int i = 0; i < pnlTODOList.getComponentCount(); i++) {
 			if (i > 0) {
 				pnlTODOList.remove(i);
@@ -48,7 +48,7 @@ public class ProjectView extends javax.swing.JFrame {
 		pnlTODOList.setPreferredSize(preferredSizeTODO);
 		for (int i = 0; i < TODOTasks.size(); i++) {
 			Task task = TODOTasks.get(i);
-			TaskTile tile = new TaskTile(task);
+			TaskTile tile = new TaskTile(task, this);
 
 			tile.setSize(220, 60);
 			tile.setLocation(10, 50 + 70 * i);
@@ -61,6 +61,7 @@ public class ProjectView extends javax.swing.JFrame {
 		pnlTODOList.repaint();
 		// ----------------------------------------------------------------
 
+		// Doing List Refresh
 		for (int i = 0; i < pnlDoingList.getComponentCount(); i++) {
 			if (i > 0) {
 				pnlDoingList.remove(i);
@@ -70,8 +71,23 @@ public class ProjectView extends javax.swing.JFrame {
 		pnlDoingList.validate();
 		pnlDoingList.repaint();
 		Dimension preferredSizeDoing = new Dimension(242, (70 * DoingTasks.size()) + 50);
-		pnlTODOList.setPreferredSize(preferredSizeDoing);
+		pnlDoingList.setPreferredSize(preferredSizeDoing);
+		for (int i = 0; i < DoingTasks.size(); i++) {
+			Task task = DoingTasks.get(i);
+			TaskTile tile = new TaskTile(task, this);
 
+			tile.setSize(220, 60);
+			tile.setLocation(10, 50 + 70 * i);
+			tile.setVisible(true);
+
+			pnlDoingList.add(tile);
+		}
+		pnlDoingList.invalidate();
+		pnlDoingList.validate();
+		pnlDoingList.repaint();
+		// ----------------------------------------------------------------
+
+		// Done List Refresh
 		for (int i = 0; i < pnlDoneList.getComponentCount(); i++) {
 			if (i > 0) {
 				pnlDoneList.remove(i);
@@ -80,7 +96,22 @@ public class ProjectView extends javax.swing.JFrame {
 		pnlDoneList.invalidate();
 		pnlDoneList.validate();
 		pnlDoneList.repaint();
+		Dimension preferredSizeDone = new Dimension(242, (70 * DoneTasks.size()) + 50);
+		pnlDoneList.setPreferredSize(preferredSizeDone);
+		for (int i = 0; i < DoneTasks.size(); i++) {
+			Task task = DoneTasks.get(i);
+			TaskTile tile = new TaskTile(task, this);
 
+			tile.setSize(220, 60);
+			tile.setLocation(10, 50 + 70 * i);
+			tile.setVisible(true);
+
+			pnlDoneList.add(tile);
+		}
+		pnlDoneList.invalidate();
+		pnlDoneList.validate();
+		pnlDoneList.repaint();
+		// ----------------------------------------------------------------
 	}
 
 	@SuppressWarnings("unchecked")
@@ -306,12 +337,13 @@ public class ProjectView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTaskActionPerformed
-		TaskAdd taskAdd = new TaskAdd(this.project);
+		TaskAdd taskAdd = new TaskAdd(this.project, this);
 		taskAdd.setVisible(true);
     }//GEN-LAST:event_btnAddTaskActionPerformed
 
     private void btnRefreshTaskListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshTaskListActionPerformed
-		refreshTaskList();
+		this.refreshTaskList();
+		this.repaint();
     }//GEN-LAST:event_btnRefreshTaskListActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

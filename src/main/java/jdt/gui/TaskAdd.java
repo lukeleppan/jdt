@@ -17,13 +17,15 @@ import javax.swing.JOptionPane;
  */
 public class TaskAdd extends javax.swing.JFrame {
 
-	private Project project;
+	private final Project project;
+	private final ProjectView context;
 
-	public TaskAdd(Project project) {
+	public TaskAdd(Project project, ProjectView context) {
 		initComponents();
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.project = project;
+		this.context = context;
 		ImageIcon icon = new ImageIcon(getClass().getResource("/jdt/images/logo.png"));
 		setIconImage(icon.getImage());
 	}
@@ -117,8 +119,14 @@ public class TaskAdd extends javax.swing.JFrame {
 
 	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
 		TaskManager taskManager = new TaskManager();
-		taskManager.createTask(this.project.getProjectID(), this.txtTitle.getText(), this.txtaDescription.getText());
-		JOptionPane.showMessageDialog(this, "Task Created. Refresh to see changes.");
+		if (!(taskManager.createTask(this.project.getProjectID(), this.txtTitle.getText(), this.txtaDescription.getText()) <= -1)) {
+			context.refreshTaskList();
+			context.repaint();
+			JOptionPane.showMessageDialog(this, "Task Created.");
+		} else {
+			JOptionPane.showMessageDialog(this, "Failed to Create Task.");
+		}
+
 		this.dispose();
 	}// GEN-LAST:event_btnAddActionPerformed
 

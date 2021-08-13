@@ -8,14 +8,16 @@ import jdt.manager.UserManager;
 import jdt.manager.Validator;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import com.github.weisj.darklaf.LafManager;
 import com.github.weisj.darklaf.theme.DarculaTheme;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import javax.swing.ImageIcon;
+import jdt.manager.PasswordAuth;
 
 /**
  *
@@ -55,8 +57,7 @@ public class MainForm extends javax.swing.JFrame {
 
 		for (int i = 0; i < projects.size(); i++) {
 			Project project = projects.get(i);
-			CardLayout cardLayout = this.cardLayoutMain;
-			ProjectTile projectTile = new ProjectTile(project, cardLayout, pnlMain);
+			ProjectTile projectTile = new ProjectTile(project, this);
 
 			projectTile.setSize(395, 202);
 			projectTile.setLocation(140, 206 * i + 5);
@@ -71,8 +72,8 @@ public class MainForm extends javax.swing.JFrame {
 	}
 
 	private void setAccountDetails() {  // Sets the current users details
-		AccountName.setText(currentUser.getUserFirstName() + " " + currentUser.getUserSurname());
-		AccountUsername.setText(currentUsername);
+		lblAccountName.setText(currentUser.getUserFirstName() + " " + currentUser.getUserSurname());
+		lblAccountUsername.setText(currentUsername);
 	}
 
 	private int calcPassScore(String password) { // Calculates the password strength
@@ -138,7 +139,7 @@ public class MainForm extends javax.swing.JFrame {
         pnlButtonContainer = new javax.swing.JPanel();
         btnSignUp = new javax.swing.JButton();
         btnSignIn = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnInitialHelp = new javax.swing.JButton();
         pnlSignIn = new javax.swing.JPanel();
         pnlSignInContainer = new javax.swing.JPanel();
         UsernameText = new javax.swing.JLabel();
@@ -148,14 +149,38 @@ public class MainForm extends javax.swing.JFrame {
         PasswordField = new javax.swing.JPasswordField();
         ErrorText = new javax.swing.JLabel();
         SignUpInsteadButtonLogPNL = new javax.swing.JButton();
+        btnSignInHelp = new javax.swing.JButton();
+        pnlSignUp = new javax.swing.JPanel();
+        pnlSignUpContainer = new javax.swing.JPanel();
+        lblFirstNameSignUp = new javax.swing.JLabel();
+        txtFirstNameSignUp = new javax.swing.JTextField();
+        lblSurnameSignUp = new javax.swing.JLabel();
+        txtSurnameSignUp = new javax.swing.JTextField();
+        lblUsernameSignUp = new javax.swing.JLabel();
+        txtUsernameSignUp = new javax.swing.JTextField();
+        lblEmailSignUp = new javax.swing.JLabel();
+        txtEmailSignUp = new javax.swing.JTextField();
+        lblDOBSignUP = new javax.swing.JLabel();
+        lblPasswordSignUp = new javax.swing.JLabel();
+        txtPasswordSignUp = new javax.swing.JPasswordField();
+        lblPasswordStrengthSignUp = new javax.swing.JLabel();
+        pbarPasswordStrengthSignUp = new javax.swing.JProgressBar();
+        lblConfirmPasswordSignUp = new javax.swing.JLabel();
+        txtConfirmPasswordSignUp = new javax.swing.JPasswordField();
+        lblErrorSignUp = new javax.swing.JLabel();
+        btnSignUpInsteadSignUp = new javax.swing.JButton();
+        btnSignUpSignUp = new javax.swing.JButton();
+        dcDOBSignUp = new com.toedter.calendar.JDateChooser();
+        btnSignupHelp = new javax.swing.JButton();
         pnlProjectList = new javax.swing.JPanel();
         pnlMainSplit = new javax.swing.JSplitPane();
         pnlSidePane = new javax.swing.JPanel();
-        AccountPanel = new javax.swing.JPanel();
-        AccountName = new javax.swing.JLabel();
-        AccountUsername = new javax.swing.JLabel();
-        AccountSetButtons = new javax.swing.JButton();
-        AccountIcon = new javax.swing.JLabel();
+        pnlAccount = new javax.swing.JPanel();
+        lblAccountName = new javax.swing.JLabel();
+        lblAccountUsername = new javax.swing.JLabel();
+        btnAccountSettings = new javax.swing.JButton();
+        lblAccountIcon = new javax.swing.JLabel();
+        btnMainViewHelp = new javax.swing.JButton();
         pnlCardPV = new javax.swing.JPanel();
         ProjectViewCardPV = new javax.swing.JPanel();
         ProjectViewToolBarPV = new javax.swing.JPanel();
@@ -182,27 +207,6 @@ public class MainForm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         DeleteAccountButton = new javax.swing.JButton();
-        pnlSignUp = new javax.swing.JPanel();
-        pnlSignUpContainer = new javax.swing.JPanel();
-        lblFirstNameSignUp = new javax.swing.JLabel();
-        txtFirstNameSignUp = new javax.swing.JTextField();
-        lblSurnameSignUp = new javax.swing.JLabel();
-        txtSurnameSignUp = new javax.swing.JTextField();
-        lblUsernameSignUp = new javax.swing.JLabel();
-        txtUsernameSignUp = new javax.swing.JTextField();
-        lblEmailSignUp = new javax.swing.JLabel();
-        txtEmailSignUp = new javax.swing.JTextField();
-        lblDOBSignUP = new javax.swing.JLabel();
-        lblPasswordSignUp = new javax.swing.JLabel();
-        txtPasswordSignUp = new javax.swing.JPasswordField();
-        lblPasswordStrengthSignUp = new javax.swing.JLabel();
-        pbarPasswordStrengthSignUp = new javax.swing.JProgressBar();
-        lblConfirmPasswordSignUp = new javax.swing.JLabel();
-        txtConfirmPasswordSignUp = new javax.swing.JPasswordField();
-        lblErrorSignUp = new javax.swing.JLabel();
-        btnSignUpInsteadSignUp = new javax.swing.JButton();
-        btnSignUpSignUp = new javax.swing.JButton();
-        dcDOBSignUp = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Just Do It");
@@ -303,10 +307,10 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(70, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Help");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnInitialHelp.setText("Help");
+        btnInitialHelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnInitialHelpActionPerformed(evt);
             }
         });
 
@@ -321,14 +325,14 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(pnlInitialContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlInitialLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnInitialHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(238, Short.MAX_VALUE))
         );
         pnlInitialLayout.setVerticalGroup(
             pnlInitialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInitialLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnInitialHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(81, 81, 81)
                 .addComponent(pnlInitialContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(180, Short.MAX_VALUE))
@@ -411,6 +415,13 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnSignInHelp.setText("Help");
+        btnSignInHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignInHelpActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSignInLayout = new javax.swing.GroupLayout(pnlSignIn);
         pnlSignIn.setLayout(pnlSignInLayout);
         pnlSignInLayout.setHorizontalGroup(
@@ -419,80 +430,322 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(243, Short.MAX_VALUE)
                 .addComponent(pnlSignInContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(230, 230, 230))
+            .addGroup(pnlSignInLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnSignInHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSignInLayout.setVerticalGroup(
             pnlSignInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSignInLayout.createSequentialGroup()
-                .addGap(122, 122, 122)
+                .addContainerGap()
+                .addComponent(btnSignInHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(72, 72, 72)
                 .addComponent(pnlSignInContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(212, Short.MAX_VALUE))
         );
 
         pnlMain.add(pnlSignIn, "LoginPanel");
 
+        pnlSignUpContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign Up", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 20))); // NOI18N
+        pnlSignUpContainer.setNextFocusableComponent(txtUsernameSignUp);
+
+        lblFirstNameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblFirstNameSignUp.setLabelFor(txtFirstNameSignUp);
+        lblFirstNameSignUp.setText("First Name");
+
+        txtFirstNameSignUp.setToolTipText("Enter First Name");
+        txtFirstNameSignUp.setNextFocusableComponent(txtSurnameSignUp);
+
+        lblSurnameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblSurnameSignUp.setLabelFor(txtSurnameSignUp);
+        lblSurnameSignUp.setText("Surname");
+
+        txtSurnameSignUp.setToolTipText("Enter Surname");
+        txtSurnameSignUp.setNextFocusableComponent(txtUsernameSignUp);
+
+        lblUsernameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblUsernameSignUp.setLabelFor(UsernameField);
+        lblUsernameSignUp.setText("Username");
+
+        txtUsernameSignUp.setToolTipText("Enter Username");
+        txtUsernameSignUp.setNextFocusableComponent(txtEmailSignUp);
+
+        lblEmailSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblEmailSignUp.setLabelFor(txtEmailSignUp);
+        lblEmailSignUp.setText("Email");
+
+        txtEmailSignUp.setToolTipText("Enter Email");
+
+        lblDOBSignUP.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblDOBSignUP.setText("Date Of Birth");
+
+        lblPasswordSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblPasswordSignUp.setLabelFor(txtPasswordSignUp);
+        lblPasswordSignUp.setText("Password");
+
+        txtPasswordSignUp.setToolTipText("Enter Password");
+        txtPasswordSignUp.setNextFocusableComponent(txtConfirmPasswordSignUp);
+        txtPasswordSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPasswordSignUpMouseClicked(evt);
+            }
+        });
+        txtPasswordSignUp.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtPasswordSignUpInputMethodTextChanged(evt);
+            }
+        });
+        txtPasswordSignUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordSignUpActionPerformed(evt);
+            }
+        });
+        txtPasswordSignUp.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtPasswordSignUpPropertyChange(evt);
+            }
+        });
+        txtPasswordSignUp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordSignUpKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPasswordSignUpKeyTyped(evt);
+            }
+        });
+
+        lblPasswordStrengthSignUp.setLabelFor(pbarPasswordStrengthSignUp);
+        lblPasswordStrengthSignUp.setText("Password Strength");
+
+        lblConfirmPasswordSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblConfirmPasswordSignUp.setLabelFor(txtConfirmPasswordSignUp);
+        lblConfirmPasswordSignUp.setText("Confirm Password");
+
+        txtConfirmPasswordSignUp.setToolTipText("Renter Password");
+        txtConfirmPasswordSignUp.setNextFocusableComponent(btnSignUpSignUp);
+        txtConfirmPasswordSignUp.setOpaque(false);
+
+        lblErrorSignUp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblErrorSignUp.setForeground(new java.awt.Color(255, 0, 51));
+        lblErrorSignUp.setAutoscrolls(true);
+        lblErrorSignUp.setFocusable(false);
+
+        btnSignUpInsteadSignUp.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
+        btnSignUpInsteadSignUp.setText("Sign In Instead");
+        btnSignUpInsteadSignUp.setToolTipText("Click to switch to Login");
+        btnSignUpInsteadSignUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignUpInsteadSignUpActionPerformed(evt);
+            }
+        });
+
+        btnSignUpSignUp.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
+        btnSignUpSignUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add_user.png"))); // NOI18N
+        btnSignUpSignUp.setText("Sign up");
+        btnSignUpSignUp.setToolTipText("Click To Sign up");
+        btnSignUpSignUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignUpSignUpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSignUpContainerLayout = new javax.swing.GroupLayout(pnlSignUpContainer);
+        pnlSignUpContainer.setLayout(pnlSignUpContainerLayout);
+        pnlSignUpContainerLayout.setHorizontalGroup(
+            pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(btnSignUpInsteadSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSignUpSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblErrorSignUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblEmailSignUp)
+                                    .addComponent(lblUsernameSignUp)
+                                    .addComponent(lblSurnameSignUp)
+                                    .addComponent(lblFirstNameSignUp)
+                                    .addComponent(txtUsernameSignUp)
+                                    .addComponent(txtSurnameSignUp)
+                                    .addComponent(txtFirstNameSignUp)
+                                    .addComponent(txtEmailSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43)
+                                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblConfirmPasswordSignUp)
+                                    .addComponent(lblPasswordSignUp)
+                                    .addComponent(lblDOBSignUP)
+                                    .addComponent(txtPasswordSignUp)
+                                    .addComponent(txtConfirmPasswordSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                                    .addComponent(pbarPasswordStrengthSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                                    .addComponent(lblPasswordStrengthSignUp)
+                                    .addComponent(dcDOBSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+        pnlSignUpContainerLayout.setVerticalGroup(
+            pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addComponent(lblFirstNameSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFirstNameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSurnameSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSurnameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblUsernameSignUp))
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addComponent(lblDOBSignUP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dcDOBSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPasswordSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPasswordSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPasswordStrengthSignUp)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addComponent(txtUsernameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(lblEmailSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtEmailSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
+                        .addComponent(pbarPasswordStrengthSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblConfirmPasswordSignUp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtConfirmPasswordSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(lblErrorSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSignUpInsteadSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSignUpSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+
+        btnSignupHelp.setText("Help");
+        btnSignupHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignupHelpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSignUpLayout = new javax.swing.GroupLayout(pnlSignUp);
+        pnlSignUp.setLayout(pnlSignUpLayout);
+        pnlSignUpLayout.setHorizontalGroup(
+            pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignUpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnSignupHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(pnlSignUpContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(121, 121, 121))
+        );
+        pnlSignUpLayout.setVerticalGroup(
+            pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSignUpLayout.createSequentialGroup()
+                .addGroup(pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSignUpLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(pnlSignUpContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlSignUpLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSignupHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(105, Short.MAX_VALUE))
+        );
+
+        pnlMain.add(pnlSignUp, "RegisterPanel");
+
         pnlMainSplit.setDividerSize(2);
 
         pnlSidePane.setEnabled(false);
         pnlSidePane.setPreferredSize(new java.awt.Dimension(200, 0));
 
-        AccountName.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        AccountName.setText("John Doe");
-        AccountName.setMaximumSize(new java.awt.Dimension(73, 15));
-        AccountName.setMinimumSize(new java.awt.Dimension(73, 15));
-        AccountName.setPreferredSize(new java.awt.Dimension(73, 15));
+        lblAccountName.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lblAccountName.setText("John Doe");
+        lblAccountName.setMaximumSize(new java.awt.Dimension(73, 15));
+        lblAccountName.setMinimumSize(new java.awt.Dimension(73, 15));
+        lblAccountName.setPreferredSize(new java.awt.Dimension(73, 15));
 
-        AccountUsername.setText("johndoe");
+        lblAccountUsername.setText("johndoe");
 
-        AccountSetButtons.setText("Account Settings");
-        AccountSetButtons.addActionListener(new java.awt.event.ActionListener() {
+        btnAccountSettings.setText("Account Settings");
+        btnAccountSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AccountSetButtonsActionPerformed(evt);
+                btnAccountSettingsActionPerformed(evt);
             }
         });
 
-        AccountIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/account.png"))); // NOI18N
+        lblAccountIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/account.png"))); // NOI18N
 
-        javax.swing.GroupLayout AccountPanelLayout = new javax.swing.GroupLayout(AccountPanel);
-        AccountPanel.setLayout(AccountPanelLayout);
-        AccountPanelLayout.setHorizontalGroup(
-            AccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AccountPanelLayout.createSequentialGroup()
-                .addComponent(AccountIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout pnlAccountLayout = new javax.swing.GroupLayout(pnlAccount);
+        pnlAccount.setLayout(pnlAccountLayout);
+        pnlAccountLayout.setHorizontalGroup(
+            pnlAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAccountLayout.createSequentialGroup()
+                .addComponent(lblAccountIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(AccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(AccountName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(AccountUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(AccountPanelLayout.createSequentialGroup()
+                .addGroup(pnlAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblAccountName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAccountUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(pnlAccountLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(AccountSetButtons)
+                .addComponent(btnAccountSettings)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        AccountPanelLayout.setVerticalGroup(
-            AccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AccountPanelLayout.createSequentialGroup()
+        pnlAccountLayout.setVerticalGroup(
+            pnlAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAccountLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(AccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AccountPanelLayout.createSequentialGroup()
-                        .addComponent(AccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlAccountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlAccountLayout.createSequentialGroup()
+                        .addComponent(lblAccountName, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AccountUsername))
-                    .addComponent(AccountIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblAccountUsername))
+                    .addComponent(lblAccountIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(AccountSetButtons)
+                .addComponent(btnAccountSettings)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        btnMainViewHelp.setText("Help");
+        btnMainViewHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainViewHelpActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlSidePaneLayout = new javax.swing.GroupLayout(pnlSidePane);
         pnlSidePane.setLayout(pnlSidePaneLayout);
         pnlSidePaneLayout.setHorizontalGroup(
             pnlSidePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(AccountPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlAccount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlSidePaneLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnMainViewHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlSidePaneLayout.setVerticalGroup(
             pnlSidePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSidePaneLayout.createSequentialGroup()
-                .addGap(0, 512, Short.MAX_VALUE)
-                .addComponent(AccountPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(btnMainViewHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 478, Short.MAX_VALUE)
+                .addComponent(pnlAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pnlMainSplit.setLeftComponent(pnlSidePane);
@@ -789,216 +1042,7 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(pnlMainSplit, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        pnlMain.add(pnlProjectList, "ProjectView");
-
-        pnlSignUpContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign Up", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 20))); // NOI18N
-        pnlSignUpContainer.setNextFocusableComponent(txtUsernameSignUp);
-
-        lblFirstNameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblFirstNameSignUp.setLabelFor(txtFirstNameSignUp);
-        lblFirstNameSignUp.setText("First Name");
-
-        txtFirstNameSignUp.setToolTipText("Enter First Name");
-        txtFirstNameSignUp.setNextFocusableComponent(txtSurnameSignUp);
-
-        lblSurnameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblSurnameSignUp.setLabelFor(txtSurnameSignUp);
-        lblSurnameSignUp.setText("Surname");
-
-        txtSurnameSignUp.setToolTipText("Enter Surname");
-        txtSurnameSignUp.setNextFocusableComponent(txtUsernameSignUp);
-
-        lblUsernameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblUsernameSignUp.setLabelFor(UsernameField);
-        lblUsernameSignUp.setText("Username");
-
-        txtUsernameSignUp.setToolTipText("Enter Username");
-        txtUsernameSignUp.setNextFocusableComponent(txtEmailSignUp);
-
-        lblEmailSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblEmailSignUp.setLabelFor(txtEmailSignUp);
-        lblEmailSignUp.setText("Email");
-
-        txtEmailSignUp.setToolTipText("Enter Email");
-
-        lblDOBSignUP.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblDOBSignUP.setText("Date Of Birth");
-
-        lblPasswordSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblPasswordSignUp.setLabelFor(txtPasswordSignUp);
-        lblPasswordSignUp.setText("Password");
-
-        txtPasswordSignUp.setToolTipText("Enter Password");
-        txtPasswordSignUp.setNextFocusableComponent(txtConfirmPasswordSignUp);
-        txtPasswordSignUp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtPasswordSignUpMouseClicked(evt);
-            }
-        });
-        txtPasswordSignUp.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtPasswordSignUpInputMethodTextChanged(evt);
-            }
-        });
-        txtPasswordSignUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordSignUpActionPerformed(evt);
-            }
-        });
-        txtPasswordSignUp.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPasswordSignUpPropertyChange(evt);
-            }
-        });
-        txtPasswordSignUp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtPasswordSignUpKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPasswordSignUpKeyTyped(evt);
-            }
-        });
-
-        lblPasswordStrengthSignUp.setLabelFor(pbarPasswordStrengthSignUp);
-        lblPasswordStrengthSignUp.setText("Password Strength");
-
-        lblConfirmPasswordSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblConfirmPasswordSignUp.setLabelFor(txtConfirmPasswordSignUp);
-        lblConfirmPasswordSignUp.setText("Confirm Password");
-
-        txtConfirmPasswordSignUp.setToolTipText("Renter Password");
-        txtConfirmPasswordSignUp.setNextFocusableComponent(btnSignUpSignUp);
-        txtConfirmPasswordSignUp.setOpaque(false);
-
-        lblErrorSignUp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblErrorSignUp.setForeground(new java.awt.Color(255, 0, 51));
-        lblErrorSignUp.setAutoscrolls(true);
-        lblErrorSignUp.setFocusable(false);
-
-        btnSignUpInsteadSignUp.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
-        btnSignUpInsteadSignUp.setText("Sign In Instead");
-        btnSignUpInsteadSignUp.setToolTipText("Click to switch to Login");
-        btnSignUpInsteadSignUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignUpInsteadSignUpActionPerformed(evt);
-            }
-        });
-
-        btnSignUpSignUp.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
-        btnSignUpSignUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add_user.png"))); // NOI18N
-        btnSignUpSignUp.setText("Sign up");
-        btnSignUpSignUp.setToolTipText("Click To Sign up");
-        btnSignUpSignUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignUpSignUpActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlSignUpContainerLayout = new javax.swing.GroupLayout(pnlSignUpContainer);
-        pnlSignUpContainer.setLayout(pnlSignUpContainerLayout);
-        pnlSignUpContainerLayout.setHorizontalGroup(
-            pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(btnSignUpInsteadSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSignUpSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblErrorSignUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblEmailSignUp)
-                                    .addComponent(lblUsernameSignUp)
-                                    .addComponent(lblSurnameSignUp)
-                                    .addComponent(lblFirstNameSignUp)
-                                    .addComponent(txtUsernameSignUp)
-                                    .addComponent(txtSurnameSignUp)
-                                    .addComponent(txtFirstNameSignUp)
-                                    .addComponent(txtEmailSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(43, 43, 43)
-                                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblConfirmPasswordSignUp)
-                                    .addComponent(lblPasswordSignUp)
-                                    .addComponent(lblDOBSignUP)
-                                    .addComponent(txtPasswordSignUp)
-                                    .addComponent(txtConfirmPasswordSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-                                    .addComponent(pbarPasswordStrengthSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
-                                    .addComponent(lblPasswordStrengthSignUp)
-                                    .addComponent(dcDOBSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
-        pnlSignUpContainerLayout.setVerticalGroup(
-            pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addComponent(lblFirstNameSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFirstNameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblSurnameSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSurnameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUsernameSignUp))
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addComponent(lblDOBSignUP)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dcDOBSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblPasswordSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPasswordSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblPasswordStrengthSignUp)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addComponent(txtUsernameSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblEmailSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEmailSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlSignUpContainerLayout.createSequentialGroup()
-                        .addComponent(pbarPasswordStrengthSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblConfirmPasswordSignUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtConfirmPasswordSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(lblErrorSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlSignUpContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSignUpInsteadSignUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSignUpSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout pnlSignUpLayout = new javax.swing.GroupLayout(pnlSignUp);
-        pnlSignUp.setLayout(pnlSignUpLayout);
-        pnlSignUpLayout.setHorizontalGroup(
-            pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignUpLayout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
-                .addComponent(pnlSignUpContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(121, 121, 121))
-        );
-        pnlSignUpLayout.setVerticalGroup(
-            pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSignUpLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(pnlSignUpContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
-        );
-
-        pnlMain.add(pnlSignUp, "RegisterPanel");
+        pnlMain.add(pnlProjectList, "ProjectList");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1029,17 +1073,17 @@ public class MainForm extends javax.swing.JFrame {
 		if (userManager.loginUser(UsernameField.getText(), new String(PasswordField.getPassword()))) {
 			currentUsername = UsernameField.getText();
 			currentUser = userManager.getUser(currentUsername);
-			cardLayoutMain.show(pnlMain, "ProjectView");
+			cardLayoutMain.show(pnlMain, "ProjectList");
 			refreshProjectView();
 			setAccountDetails();
 			JOptionPane.showMessageDialog(this,
-							"✔ Successful Login"
-							+ "\nWelcome " + currentUser.getUserFirstName()
+					"✔ Successful Login"
+					+ "\nWelcome " + currentUser.getUserFirstName()
 			);
 		} else {
 			JOptionPane.showMessageDialog(this,
-							"❌ Username or Password is Incorrect"
-							+ "\nPlease Try Again"
+					"❌ Username or Password is Incorrect"
+					+ "\nPlease Try Again"
 			);
 		}
         }//GEN-LAST:event_SignInButtonLogPNLActionPerformed
@@ -1056,7 +1100,7 @@ public class MainForm extends javax.swing.JFrame {
 		String surname = txtSurnameSignUp.getText();
 		String username = txtUsernameSignUp.getText();
 		String email = txtEmailSignUp.getText();
-		Date DOB = dcDOBSignUp.getDate();
+		LocalDate DOB = dcDOBSignUp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		char[] password = txtPasswordSignUp.getPassword();
 		char[] repeatPassword = txtConfirmPasswordSignUp.getPassword();
 
@@ -1109,8 +1153,8 @@ public class MainForm extends javax.swing.JFrame {
 		} else if (userManager.registerUser(user, userCreds)) {
 			cardLayoutMain.show(pnlMain, "LoginPanel");
 			JOptionPane.showMessageDialog(this,
-							"Successfully Registered ✔"
-							+ "\nPlease Login"
+					"Successfully Registered ✔"
+					+ "\nPlease Login"
 			);
 		}
 
@@ -1183,12 +1227,12 @@ public class MainForm extends javax.swing.JFrame {
 			ErrorLabelNPPV.setText("Title is too long");
 		} else if (ProjectDescriptionLabelNPPV.getText().length() > 300) {
 			ErrorLabelNPPV.setText("Desription is too long");
-		} else if (projectManager.createProject(ProjectNameTXTNPPV.getText(), DesriptionTextAreaNPPV.getText(), currentUser) <= -1) {
+		} else if (!(projectManager.createProject(ProjectNameTXTNPPV.getText(), DesriptionTextAreaNPPV.getText(), currentUser) <= -1)) {
 			cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
 			refreshProjectView();
 			JOptionPane.showMessageDialog(this,
-							"Successfully Created Project ✔"
-							+ "\nClick Refresh to see it"
+					"Successfully Created Project ✔"
+					+ "\nClick Refresh to see it"
 			);
 		}
   }//GEN-LAST:event_CreateProjectBTNNPPVActionPerformed
@@ -1205,9 +1249,9 @@ public class MainForm extends javax.swing.JFrame {
 		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
   }//GEN-LAST:event_BackButtonActionPerformed
 
-  private void AccountSetButtonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountSetButtonsActionPerformed
+  private void btnAccountSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountSettingsActionPerformed
 		cardLayoutPV.show(pnlCardPV, "AccountSettings");
-  }//GEN-LAST:event_AccountSetButtonsActionPerformed
+  }//GEN-LAST:event_btnAccountSettingsActionPerformed
 
   private void DeleteAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAccountButtonActionPerformed
 		UserManager userManager = new UserManager();
@@ -1227,9 +1271,21 @@ public class MainForm extends javax.swing.JFrame {
 		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
   }//GEN-LAST:event_AccounSettingsBackButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnInitialHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitialHelpActionPerformed
 		new Help().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnInitialHelpActionPerformed
+
+    private void btnMainViewHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainViewHelpActionPerformed
+		new Help().setVisible(true);
+    }//GEN-LAST:event_btnMainViewHelpActionPerformed
+
+    private void btnSignupHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupHelpActionPerformed
+		new Help().setVisible(true);
+    }//GEN-LAST:event_btnSignupHelpActionPerformed
+
+    private void btnSignInHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInHelpActionPerformed
+		new Help().setVisible(true);
+    }//GEN-LAST:event_btnSignInHelpActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -1251,13 +1307,8 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton AccounSettingsBackButton;
-    private javax.swing.JLabel AccountIcon;
-    private javax.swing.JLabel AccountName;
-    private javax.swing.JPanel AccountPanel;
-    private javax.swing.JButton AccountSetButtons;
     private javax.swing.JPanel AccountSettingToolbar;
     private javax.swing.JPanel AccountSettingsPanel;
-    private javax.swing.JLabel AccountUsername;
     private javax.swing.JButton BackButton;
     private javax.swing.JButton CreateProjectBTNNPPV;
     private javax.swing.JButton DeleteAccountButton;
@@ -1284,15 +1335,22 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField UsernameField;
     private javax.swing.JLabel UsernameText;
     private javax.swing.JLabel UsernameText2;
+    private javax.swing.JButton btnAccountSettings;
+    private javax.swing.JButton btnInitialHelp;
+    private javax.swing.JButton btnMainViewHelp;
     private javax.swing.JButton btnSignIn;
+    private javax.swing.JButton btnSignInHelp;
     private javax.swing.JButton btnSignUp;
     private javax.swing.JButton btnSignUpInsteadSignUp;
     private javax.swing.JButton btnSignUpSignUp;
+    private javax.swing.JButton btnSignupHelp;
     private com.toedter.calendar.JDateChooser dcDOBSignUp;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblAccountIcon;
+    private javax.swing.JLabel lblAccountName;
+    private javax.swing.JLabel lblAccountUsername;
     private javax.swing.JLabel lblConfirmPasswordSignUp;
     private javax.swing.JLabel lblDOBSignUP;
     private javax.swing.JLabel lblEmailSignUp;
@@ -1305,6 +1363,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUsernameSignUp;
     private javax.swing.JProgressBar pbarPasswordStrengthSignUp;
+    private javax.swing.JPanel pnlAccount;
     private javax.swing.JPanel pnlButtonContainer;
     public static javax.swing.JPanel pnlCardPV;
     private javax.swing.JPanel pnlInitial;
