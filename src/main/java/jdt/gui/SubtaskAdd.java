@@ -47,7 +47,6 @@ public final class SubtaskAdd extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(300, 135));
         setResizable(false);
 
         lblHeading.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N

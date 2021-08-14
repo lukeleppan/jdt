@@ -7,10 +7,11 @@ import jdt.manager.SubtaskManager;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import jdt.manager.TaskManager;
 
 /**
  *
@@ -21,7 +22,9 @@ public final class TaskView extends javax.swing.JFrame {
 
 	private final Task task;
 	private final ProjectView context;
+	private final TaskManager taskManager;
 	private final SubtaskManager subtaskManager;
+	private List<Subtask> subtasks;
 
 	public TaskView(Task task, ProjectView context) {
 		initComponents();
@@ -33,6 +36,7 @@ public final class TaskView extends javax.swing.JFrame {
 
 		this.task = task;
 		this.context = context;
+		this.taskManager = new TaskManager();
 		this.subtaskManager = new SubtaskManager();
 		txtTitle.setText(task.getTaskTitle());
 		txtaDescription.setText(task.getTaskDescription());
@@ -53,11 +57,8 @@ public final class TaskView extends javax.swing.JFrame {
 
 		this.pnlLeftPaneScroll.getVerticalScrollBar().setUnitIncrement(16);
 
-		this.tblSubtaskList.getModel().addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				tableUpdate(e);
-			}
+		this.tblSubtaskList.getModel().addTableModelListener((TableModelEvent e) -> {
+			tableUpdate(e);
 		});
 
 		this.refreshSubtaskList();
@@ -65,7 +66,7 @@ public final class TaskView extends javax.swing.JFrame {
 	}
 
 	public void refreshSubtaskList() {
-		List<Subtask> subtasks = subtaskManager.getTaskSubtasks(task);
+		this.subtasks = subtaskManager.getTaskSubtasks(task);
 
 		DefaultTableModel tableModel = (DefaultTableModel) tblSubtaskList.getModel();
 		tableModel.setRowCount(0);
@@ -81,11 +82,6 @@ public final class TaskView extends javax.swing.JFrame {
 		tableColumnModel.getColumn(0).setPreferredWidth(275);
 		tableColumnModel.getColumn(1).setPreferredWidth(25);
 		tblSubtaskList.setColumnModel(tableColumnModel);
-
-		pnlSubtaskListScroll.setPreferredSize(new Dimension(
-				355,
-				(tblSubtaskList.getRowHeight() * tblSubtaskList.getRowCount()) + 15
-		));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -95,7 +91,7 @@ public final class TaskView extends javax.swing.JFrame {
         btngState = new javax.swing.ButtonGroup();
         pnlLeftPaneScroll = new javax.swing.JScrollPane();
         pnlLeftPane = new javax.swing.JPanel();
-        btnTaskDetailPane = new javax.swing.JPanel();
+        pnlTaskDetailPane = new javax.swing.JPanel();
         txtTitle = new javax.swing.JTextField();
         pnlScrollWrapper = new javax.swing.JScrollPane();
         txtaDescription = new javax.swing.JTextArea();
@@ -103,20 +99,17 @@ public final class TaskView extends javax.swing.JFrame {
         pnlHeaderSubtaskList = new javax.swing.JPanel();
         lblSubtaskTitle = new javax.swing.JLabel();
         btnAddSubtask = new javax.swing.JButton();
-        pnlSubtaskListScroll = new javax.swing.JScrollPane();
         tblSubtaskList = new javax.swing.JTable();
         pnlRightPane = new javax.swing.JPanel();
         btnToggleTODO = new javax.swing.JRadioButton();
         btnToggleDoing = new javax.swing.JRadioButton();
         btnToggleDone = new javax.swing.JRadioButton();
         pnlBottomPane = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        pnlLeftPane.setPreferredSize(new java.awt.Dimension(356, 541));
 
         txtTitle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,20 +121,20 @@ public final class TaskView extends javax.swing.JFrame {
         txtaDescription.setRows(5);
         pnlScrollWrapper.setViewportView(txtaDescription);
 
-        javax.swing.GroupLayout btnTaskDetailPaneLayout = new javax.swing.GroupLayout(btnTaskDetailPane);
-        btnTaskDetailPane.setLayout(btnTaskDetailPaneLayout);
-        btnTaskDetailPaneLayout.setHorizontalGroup(
-            btnTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnTaskDetailPaneLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlTaskDetailPaneLayout = new javax.swing.GroupLayout(pnlTaskDetailPane);
+        pnlTaskDetailPane.setLayout(pnlTaskDetailPaneLayout);
+        pnlTaskDetailPaneLayout.setHorizontalGroup(
+            pnlTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTaskDetailPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(btnTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(pnlTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtTitle)
                     .addComponent(pnlScrollWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        btnTaskDetailPaneLayout.setVerticalGroup(
-            btnTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnTaskDetailPaneLayout.createSequentialGroup()
+        pnlTaskDetailPaneLayout.setVerticalGroup(
+            pnlTaskDetailPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTaskDetailPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,7 +199,6 @@ public final class TaskView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        pnlSubtaskListScroll.setViewportView(tblSubtaskList);
 
         javax.swing.GroupLayout pnlSubtaskListLayout = new javax.swing.GroupLayout(pnlSubtaskList);
         pnlSubtaskList.setLayout(pnlSubtaskListLayout);
@@ -215,18 +207,17 @@ public final class TaskView extends javax.swing.JFrame {
             .addGroup(pnlSubtaskListLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlHeaderSubtaskList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlSubtaskListLayout.createSequentialGroup()
-                        .addComponent(pnlSubtaskListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 2, Short.MAX_VALUE))
-                    .addComponent(pnlHeaderSubtaskList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(tblSubtaskList, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 4, Short.MAX_VALUE))))
         );
         pnlSubtaskListLayout.setVerticalGroup(
             pnlSubtaskListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSubtaskListLayout.createSequentialGroup()
                 .addComponent(pnlHeaderSubtaskList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnlSubtaskListScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tblSubtaskList, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlLeftPaneLayout = new javax.swing.GroupLayout(pnlLeftPane);
@@ -236,16 +227,16 @@ public final class TaskView extends javax.swing.JFrame {
             .addGroup(pnlLeftPaneLayout.createSequentialGroup()
                 .addGroup(pnlLeftPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlSubtaskList, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTaskDetailPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlTaskDetailPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlLeftPaneLayout.setVerticalGroup(
             pnlLeftPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLeftPaneLayout.createSequentialGroup()
-                .addComponent(btnTaskDetailPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlTaskDetailPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlSubtaskList, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(269, Short.MAX_VALUE))
+                .addComponent(pnlSubtaskList, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         pnlLeftPaneScroll.setViewportView(pnlLeftPane);
@@ -290,9 +281,19 @@ public final class TaskView extends javax.swing.JFrame {
 
         pnlBottomPane.setBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")));
 
-        jButton2.setText("Save");
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Close");
+        btnClose.setText("Close");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlBottomPaneLayout = new javax.swing.GroupLayout(pnlBottomPane);
         pnlBottomPane.setLayout(pnlBottomPaneLayout);
@@ -300,9 +301,9 @@ public final class TaskView extends javax.swing.JFrame {
             pnlBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBottomPaneLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnClose)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(btnSave)
                 .addContainerGap())
         );
         pnlBottomPaneLayout.setVerticalGroup(
@@ -310,8 +311,8 @@ public final class TaskView extends javax.swing.JFrame {
             .addGroup(pnlBottomPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnSave)
+                    .addComponent(btnClose))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -338,10 +339,44 @@ public final class TaskView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+		this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+		String taskState = (btnToggleTODO.isSelected() ? "TODO"
+				: btnToggleDoing.isSelected() ? "Doing"
+				: "Done");
+
+		Task updatedTask = new Task(
+				this.task.getTaskID(),
+				this.task.getProjectID(),
+				txtTitle.getText(),
+				txtaDescription.getText(),
+				taskState
+		);
+
+		if (!(taskManager.updateTask(updatedTask) <= -1)) {
+			context.refreshTaskList();
+			this.dispose();
+		} else {
+			JOptionPane.showMessageDialog(this, "Failed to Update. Restart program.");
+		}
+    }//GEN-LAST:event_btnSaveActionPerformed
+
 	private void tableUpdate(TableModelEvent e) {
 		if (e.getType() == TableModelEvent.UPDATE) {
 			DefaultTableModel model = (DefaultTableModel) tblSubtaskList.getModel();
-			System.out.println(model.getValueAt(e.getLastRow(), 1));
+			Subtask oldSubtask = subtasks.get(e.getLastRow());
+			Subtask updatedSubtask = new Subtask(
+					oldSubtask.getSubtaskID(),
+					oldSubtask.getTaskID(),
+					oldSubtask.getSubtaskTitle(),
+					(boolean) model.getValueAt(e.getLastRow(), 1)
+			);
+			if (subtaskManager.updateSubtask(updatedSubtask) <= -1) {
+				JOptionPane.showMessageDialog(this, "Failed to Update. Restart program.");
+			}
 		}
 	}
 
@@ -356,13 +391,12 @@ public final class TaskView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSubtask;
-    private javax.swing.JPanel btnTaskDetailPane;
+    private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnSave;
     private javax.swing.JRadioButton btnToggleDoing;
     private javax.swing.JRadioButton btnToggleDone;
     private javax.swing.JRadioButton btnToggleTODO;
     private javax.swing.ButtonGroup btngState;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel lblSubtaskTitle;
     private javax.swing.JPanel pnlBottomPane;
     private javax.swing.JPanel pnlHeaderSubtaskList;
@@ -371,7 +405,7 @@ public final class TaskView extends javax.swing.JFrame {
     private javax.swing.JPanel pnlRightPane;
     private javax.swing.JScrollPane pnlScrollWrapper;
     private javax.swing.JPanel pnlSubtaskList;
-    private javax.swing.JScrollPane pnlSubtaskListScroll;
+    private javax.swing.JPanel pnlTaskDetailPane;
     private javax.swing.JTable tblSubtaskList;
     private javax.swing.JTextField txtTitle;
     private javax.swing.JTextArea txtaDescription;

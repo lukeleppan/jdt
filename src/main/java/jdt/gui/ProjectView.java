@@ -121,6 +121,7 @@ public final class ProjectView extends javax.swing.JFrame {
         pnlBarWrapper = new javax.swing.JPanel();
         btnAddTask = new javax.swing.JButton();
         btnRefreshTaskList = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         pnlScrollWrapper = new javax.swing.JScrollPane();
         pnlProjectViewWrapper = new javax.swing.JPanel();
         pnlTODOList = new javax.swing.JPanel();
@@ -154,12 +155,22 @@ public final class ProjectView extends javax.swing.JFrame {
             }
         });
 
+        btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/back_green.png"))); // NOI18N
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlBarWrapperLayout = new javax.swing.GroupLayout(pnlBarWrapper);
         pnlBarWrapper.setLayout(pnlBarWrapperLayout);
         pnlBarWrapperLayout.setHorizontalGroup(
             pnlBarWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBarWrapperLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRefreshTaskList, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAddTask, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,9 +180,13 @@ public final class ProjectView extends javax.swing.JFrame {
             pnlBarWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBarWrapperLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlBarWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddTask, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(btnRefreshTaskList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlBarWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddTask, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlBarWrapperLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(pnlBarWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRefreshTaskList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -346,8 +361,13 @@ public final class ProjectView extends javax.swing.JFrame {
 		this.repaint();
     }//GEN-LAST:event_btnRefreshTaskListActionPerformed
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+		this.dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddTask;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnRefreshTaskList;
     private javax.swing.JLabel lblDoing;
     private javax.swing.JLabel lblDone;

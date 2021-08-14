@@ -34,6 +34,8 @@ public class DBConnection {
 				} else if (args[i] instanceof LocalDate) {
 					LocalDate localDate = (LocalDate) args[i];
 					stmt.setDate(i + 1, java.sql.Date.valueOf(localDate));
+				} else if (args[i] instanceof Boolean) {
+					stmt.setBoolean(i + 1, (boolean) args[i]);
 				}
 			}
 			return stmt.executeQuery();
@@ -53,6 +55,8 @@ public class DBConnection {
 				} else if (args[i] instanceof LocalDate) {
 					LocalDate localDate = (LocalDate) args[i];
 					stmt.setDate(i + 1, java.sql.Date.valueOf(localDate));
+				} else if (args[i] instanceof Boolean) {
+					stmt.setBoolean(i + 1, (boolean) args[i]);
 				}
 			}
 			return stmt.executeUpdate();

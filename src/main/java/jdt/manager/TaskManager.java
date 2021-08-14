@@ -57,4 +57,16 @@ public class TaskManager {
 
 		return projectTaskList;
 	}
+
+	public int updateTask(Task updatedTask) {
+		return dbCon.update(
+				"UPDATE tasks SET taskTitle = ?, taskDescription = ?, taskState = ? WHERE taskID = ?;",
+				new Object[]{
+					updatedTask.getTaskTitle(),
+					updatedTask.getTaskDescription(),
+					updatedTask.getTaskState(),
+					updatedTask.getTaskID()
+				}
+		);
+	}
 }
