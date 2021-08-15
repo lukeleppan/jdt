@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class ProjectManager {
 
-	private final DBConnection dbCon = new DBConnection();
+	private final DBConnection DB_CON = new DBConnection();
 
 	/**
 	 * Create a new project.
@@ -27,7 +27,7 @@ public class ProjectManager {
 	 * @return -1 if the subtask was not created, otherwise 1.
 	 */
 	public int createProject(String title, String description, User currentUser) {
-		return dbCon.update(
+		return DB_CON.update(
 				"INSERT INTO projects (userID, projectTitle, projectDescription) VALUES (?, ?, ?);",
 				new Object[]{
 					currentUser.getUserID(),
@@ -50,7 +50,7 @@ public class ProjectManager {
 	public List<Project> getUserProjects(User currentUser, String search, String orderBy, boolean orderByDirection) {
 		List<Project> userProjectList = new ArrayList<>();
 
-		try (ResultSet rs = dbCon.query(
+		try (ResultSet rs = DB_CON.query(
 				"SELECT * FROM projects WHERE userID = ? AND projectTitle LIKE '" + search + "' ORDER BY " + orderBy + " " + (orderByDirection ? "ASC" : "DESC") + ";",
 				new Object[]{
 					currentUser.getUserID()
@@ -75,7 +75,7 @@ public class ProjectManager {
 	 * @return -1 if project not updated.
 	 */
 	public int updateProject(Project project) {
-		return dbCon.update(
+		return DB_CON.update(
 				"UPDATE projects SET projectTitle = ?, projectDescription = ? WHERE projectID = ?;",
 				new Object[]{
 					project.getProjectTitle(),
@@ -93,7 +93,7 @@ public class ProjectManager {
 	 * @return -1 if the project was not deleted.
 	 */
 	public int deleteProject(Project project) {
-		return dbCon.update(
+		return DB_CON.update(
 				"DELETE FROM projects WHERE projectID = ?;",
 				new Object[]{
 					project.getProjectID()

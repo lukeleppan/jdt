@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class SubtaskManager {
 
-	private final DBConnection dbCon = new DBConnection();
+	private final DBConnection DB_CON = new DBConnection();
 
 	/**
 	 * Create a subtask.
@@ -27,7 +27,7 @@ public class SubtaskManager {
 	 * @return -1 if the subtask was not created, otherwise 1.
 	 */
 	public int createSubtask(int taskID, String title) {
-		return dbCon.update("INSERT INTO subtasks (taskID, subtaskTitle, subtaskCompleted) VALUES (?, ?, false);",
+		return DB_CON.update("INSERT INTO subtasks (taskID, subtaskTitle, subtaskCompleted) VALUES (?, ?, false);",
 				new Object[]{taskID, title});
 	}
 
@@ -40,7 +40,7 @@ public class SubtaskManager {
 	public List<Subtask> getTaskSubtasks(Task currentTask) {
 		List<Subtask> subtaskList = new ArrayList<>();
 
-		try (ResultSet rs = dbCon.query("SELECT * FROM subtasks WHERE taskID = ? ORDER BY subtaskID;",
+		try (ResultSet rs = DB_CON.query("SELECT * FROM subtasks WHERE taskID = ? ORDER BY subtaskID;",
 				new Object[]{currentTask.getTaskID()})) {
 			while (rs.next()) {
 				Subtask subtask = new Subtask(rs.getInt("subtaskID"), rs.getInt("taskID"), rs.getString("subtaskTitle"),
@@ -61,7 +61,7 @@ public class SubtaskManager {
 	 * @return -1 if subtask fails to update
 	 */
 	public int updateSubtask(Subtask subtask) {
-		return dbCon.update(
+		return DB_CON.update(
 				"UPDATE subtasks SET subtaskCompleted = ? WHERE subtaskID = ?;",
 				new Object[]{subtask.isSubtaskCompleted(), subtask.getSubtaskID()}
 		);

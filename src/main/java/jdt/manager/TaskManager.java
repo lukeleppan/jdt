@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class TaskManager {
 
-	private final DBConnection dbCon = new DBConnection();
+	private final DBConnection DB_CON = new DBConnection();
 
 	/**
 	 * Create a new task.
@@ -27,14 +27,14 @@ public class TaskManager {
 	 * @return -1 if the task could not be created, otherwise 1.
 	 */
 	public int createTask(int projectID, String title, String description) {
-		return dbCon.update(
+		return DB_CON.update(
 				"INSERT INTO tasks (projectID, taskTitle, taskDescription, taskState) VALUES (?, ?, ?, 'TODO');",
 				new Object[]{projectID, title, description}
 		);
 	}
 
 	/**
-	 * Get a list of all tasks in a project with a specify state.
+	 * Get a list of all tasks in a project with a specific state.
 	 *
 	 * @param currentProject The project for which the tasks should be returned.
 	 * @param taskState The state of the tasks.
@@ -44,7 +44,7 @@ public class TaskManager {
 	public List<Task> getProjectTask(Project currentProject, String taskState) {
 		List<Task> projectTaskList = new ArrayList<>();
 
-		try (ResultSet rs = dbCon.query("SELECT * FROM tasks WHERE projectID = ? AND taskState = ?;",
+		try (ResultSet rs = DB_CON.query("SELECT * FROM tasks WHERE projectID = ? AND taskState = ?;",
 				new Object[]{currentProject.getProjectID(), taskState})) {
 			while (rs.next()) {
 				Task task = new Task(rs.getInt("taskID"), rs.getInt("projectID"), rs.getString("taskTitle"),
@@ -65,7 +65,7 @@ public class TaskManager {
 	 * @return -1 if the task failed to update.
 	 */
 	public int updateTask(Task updatedTask) {
-		return dbCon.update(
+		return DB_CON.update(
 				"UPDATE tasks SET taskTitle = ?, taskDescription = ?, taskState = ? WHERE taskID = ?;",
 				new Object[]{
 					updatedTask.getTaskTitle(),
@@ -84,7 +84,7 @@ public class TaskManager {
 	 * @return -1 if the task was not deleted.
 	 */
 	public int deleteTask(Task task) {
-		return dbCon.update("DELETE FROM tasks WHERE taskID = ?;",
+		return DB_CON.update("DELETE FROM tasks WHERE taskID = ?;",
 				new Object[]{
 					task.getTaskID()
 				}

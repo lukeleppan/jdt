@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class UserManager {
 
-	private final DBConnection dbCon = new DBConnection();
+	private final DBConnection DB_CON = new DBConnection();
 
 	/**
 	 * Checks for a user with a given username.
@@ -29,7 +29,7 @@ public class UserManager {
 	public boolean checkForUser(String username) {
 		boolean exists = false;
 
-		try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[]{})) {
+		try (ResultSet rs = DB_CON.query("SELECT * FROM usercreds;", new String[]{})) {
 
 			List<UserCreds> userCredsShareableList = new ArrayList<>();
 
@@ -64,12 +64,12 @@ public class UserManager {
 
 		PasswordAuth pwAuth = new PasswordAuth();
 
-		dbCon.update("INSERT INTO usercreds (username, password) VALUES (?, ?);",
+		DB_CON.update("INSERT INTO usercreds (username, password) VALUES (?, ?);",
 				new Object[]{userCreds.getUsername(), pwAuth.hash(userCreds.getPassword().toCharArray())});
 
 		List<UserCreds> userCredsShareableList = new ArrayList<>();
 
-		try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new String[]{})) {
+		try (ResultSet rs = DB_CON.query("SELECT * FROM usercreds;", new String[]{})) {
 			while (rs.next()) {
 				UserCreds userCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"), rs.getString("password"));
 				userCredsShareableList.add(userCred);
@@ -84,7 +84,7 @@ public class UserManager {
 			}
 		}
 
-		int res = dbCon.update("INSERT INTO users VALUES (?, ?, ?, ?, ?);", new Object[]{userID,
+		int res = DB_CON.update("INSERT INTO users VALUES (?, ?, ?, ?, ?);", new Object[]{userID,
 			user.getUserEmail(), user.getUserDOB(), user.getUserFirstName(), user.getUserSurname()});
 
 		if (res != -1) {
@@ -107,7 +107,7 @@ public class UserManager {
 		PasswordAuth pwAuth = new PasswordAuth();
 
 		List<UserCreds> userCredsShareableList = new ArrayList<>();
-		try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new Object[]{})) {
+		try (ResultSet rs = DB_CON.query("SELECT * FROM usercreds;", new Object[]{})) {
 			while (rs.next()) {
 				UserCreds tempUserCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"),
 						rs.getString("password"));
@@ -138,7 +138,7 @@ public class UserManager {
 		User user = null;
 		int userID = -1;
 		List<UserCreds> userCredsShareableList = new ArrayList<>();
-		try (ResultSet rs = dbCon.query("SELECT * FROM usercreds;", new Object[]{})) {
+		try (ResultSet rs = DB_CON.query("SELECT * FROM usercreds;", new Object[]{})) {
 			while (rs.next()) {
 				UserCreds tempUserCred = new UserCreds(rs.getInt("userCredID"), rs.getString("username"),
 						rs.getString("password"));
@@ -155,7 +155,7 @@ public class UserManager {
 		}
 
 		List<User> userShareableList = new ArrayList<>();
-		try (ResultSet rs = dbCon.query("SELECT * FROM users;", new Object[]{})) {
+		try (ResultSet rs = DB_CON.query("SELECT * FROM users;", new Object[]{})) {
 			while (rs.next()) {
 				User tempUser = new User(
 						rs.getInt("userID"), rs.getString("email"),
@@ -187,6 +187,6 @@ public class UserManager {
 	 * @return -1 if failed to delete user.
 	 */
 	public int deleteAccount(String username) {
-		return dbCon.update("DELETE * FROM usercreds WHERE username = ?;", new Object[]{username});
+		return DB_CON.update("DELETE * FROM usercreds WHERE username = ?;", new Object[]{username});
 	}
 }

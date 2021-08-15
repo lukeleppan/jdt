@@ -24,14 +24,14 @@ public final class PasswordAuth {
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
     private static final int SIZE = 128;
     private static final Pattern LAYOUT = Pattern.compile("jdt\\$(\\d\\d?)\\$(.{43})");
-    private final SecureRandom random;
+    private final SecureRandom RANDOM;
 
     /**
      * Create a password manager.
      */
     public PasswordAuth() {
         iterations(COST);
-        this.random = new SecureRandom();
+        this.RANDOM = new SecureRandom();
     }
 
     private static int iterations(int cost) {
@@ -47,7 +47,7 @@ public final class PasswordAuth {
      */
     public String hash(char[] password) {
         byte[] salt = new byte[SIZE / 8];
-        random.nextBytes(salt);
+        RANDOM.nextBytes(salt);
         byte[] dk = pbkdf2(password, salt, 1 << COST);
         byte[] hash = new byte[salt.length + dk.length];
         System.arraycopy(salt, 0, hash, 0, salt.length);
