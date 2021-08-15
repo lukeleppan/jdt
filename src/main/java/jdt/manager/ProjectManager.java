@@ -41,14 +41,17 @@ public class ProjectManager {
 	 * Get a list of all projects for a user.
 	 *
 	 * @param currentUser current user.
+	 * @param search searchTerm
+	 * @param orderBy field to order by.
+	 * @param orderByDirection direction.
 	 *
 	 * @return a list of all projects for a user.
 	 */
-	public List<Project> getUserProjects(User currentUser) {
+	public List<Project> getUserProjects(User currentUser, String search, String orderBy, boolean orderByDirection) {
 		List<Project> userProjectList = new ArrayList<>();
 
 		try (ResultSet rs = dbCon.query(
-				"SELECT * FROM projects WHERE userID = ?;",
+				"SELECT * FROM projects WHERE userID = ? AND projectTitle LIKE '" + search + "' ORDER BY " + orderBy + " " + (orderByDirection ? "ASC" : "DESC") + ";",
 				new Object[]{
 					currentUser.getUserID()
 				}

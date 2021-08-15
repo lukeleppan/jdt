@@ -55,7 +55,12 @@ public final class MainForm extends javax.swing.JFrame {
 		pnlProjectListMain.validate();
 		pnlProjectListMain.repaint();
 		ProjectManager projectManager = new ProjectManager();
-		List<Project> projects = projectManager.getUserProjects(currentUser);
+		List<Project> projects = projectManager.getUserProjects(
+				currentUser,
+				txtSearch.getText().equals("Enter search term to search for title") ? "*" : "*" + txtSearch.getText() + "*",
+				(cbOrderBy.getSelectedIndex() == 0 ? "projectTitle" : cbOrderBy.getSelectedIndex() == 1 ? "projectDescription" : "projectID"),
+				cbOrderByDirection.getSelectedIndex() == 0
+		);
 		Dimension preferredSize = new Dimension(818, 210 * projects.size() + 10);
 		pnlProjectListMain.setPreferredSize(preferredSize);
 		pnlProjectListScroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -196,6 +201,12 @@ public final class MainForm extends javax.swing.JFrame {
         pnlProjectListToolBar = new javax.swing.JPanel();
         btnNewProjectToolbar = new javax.swing.JButton();
         btnRefreshToolBar = new javax.swing.JButton();
+        pnlSearchSort = new javax.swing.JPanel();
+        txtSearch = new javax.swing.JTextField();
+        lblOrderBy = new javax.swing.JLabel();
+        cbOrderBy = new javax.swing.JComboBox<>();
+        cbOrderByDirection = new javax.swing.JComboBox<>();
+        btnSearch = new javax.swing.JButton();
         pnlProjectListScroll = new javax.swing.JScrollPane();
         pnlProjectListMain = new javax.swing.JPanel();
         pnlNewProjectView = new javax.swing.JPanel();
@@ -212,9 +223,9 @@ public final class MainForm extends javax.swing.JFrame {
         sepNewProjectView = new javax.swing.JSeparator();
         pnlAccountSettings = new javax.swing.JPanel();
         pnlAccountSettingToolBar = new javax.swing.JPanel();
-        btnAccountSettingsBack = new javax.swing.JToggleButton();
         lblAccountSettings = new javax.swing.JLabel();
         sepAccountSetttings = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         pnlAccountSettingsMain = new javax.swing.JPanel();
         btnDeleteAccount = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
@@ -778,6 +789,62 @@ public final class MainForm extends javax.swing.JFrame {
                     .addComponent(btnRefreshToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        txtSearch.setText("Enter search term to search for title");
+        txtSearch.setToolTipText("Input Search Term");
+        txtSearch.setName(""); // NOI18N
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
+
+        lblOrderBy.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblOrderBy.setText("Order By:");
+
+        cbOrderBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Title", "Description", "Created Date" }));
+
+        cbOrderByDirection.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ascending", "Descending" }));
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSearchSortLayout = new javax.swing.GroupLayout(pnlSearchSort);
+        pnlSearchSort.setLayout(pnlSearchSortLayout);
+        pnlSearchSortLayout.setHorizontalGroup(
+            pnlSearchSortLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSearchSortLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblOrderBy, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbOrderBy, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbOrderByDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pnlSearchSortLayout.setVerticalGroup(
+            pnlSearchSortLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSearchSortLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlSearchSortLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(lblOrderBy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbOrderBy)
+                    .addComponent(cbOrderByDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addContainerGap())
+        );
+
         pnlProjectListScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         pnlProjectListScroll.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -805,13 +872,19 @@ public final class MainForm extends javax.swing.JFrame {
                     .addGroup(pnlProjectListCardLayout.createSequentialGroup()
                         .addComponent(pnlProjectListToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
+            .addGroup(pnlProjectListCardLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(pnlSearchSort, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         pnlProjectListCardLayout.setVerticalGroup(
             pnlProjectListCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlProjectListCardLayout.createSequentialGroup()
                 .addComponent(pnlProjectListToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlProjectListScroll))
+                .addComponent(pnlSearchSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlProjectListScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))
         );
 
         pnlCardPV.add(pnlProjectListCard, "ProjectViewPV");
@@ -928,15 +1001,15 @@ public final class MainForm extends javax.swing.JFrame {
 
         pnlCardPV.add(pnlNewProjectView, "NewProject");
 
-        btnAccountSettingsBack.setText("Back");
-        btnAccountSettingsBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAccountSettingsBackActionPerformed(evt);
-            }
-        });
-
         lblAccountSettings.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         lblAccountSettings.setText("Account Settings");
+
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlAccountSettingToolBarLayout = new javax.swing.GroupLayout(pnlAccountSettingToolBar);
         pnlAccountSettingToolBar.setLayout(pnlAccountSettingToolBarLayout);
@@ -944,21 +1017,25 @@ public final class MainForm extends javax.swing.JFrame {
             pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlAccountSettingToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAccountSettingsBack, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(164, 164, 164)
-                .addComponent(lblAccountSettings)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(sepAccountSetttings, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAccountSettingToolBarLayout.createSequentialGroup()
+                        .addGap(155, 155, 155)
+                        .addComponent(lblAccountSettings)
+                        .addContainerGap(271, Short.MAX_VALUE))
+                    .addComponent(sepAccountSetttings)))
         );
         pnlAccountSettingToolBarLayout.setVerticalGroup(
             pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAccountSettingToolBarLayout.createSequentialGroup()
+            .addGroup(pnlAccountSettingToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAccountSettingsBack, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(lblAccountSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(3, 3, 3)
-                .addComponent(sepAccountSetttings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAccountSettingToolBarLayout.createSequentialGroup()
+                        .addComponent(lblAccountSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(12, 12, 12)
+                        .addComponent(sepAccountSetttings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         btnDeleteAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/delete.png"))); // NOI18N
@@ -991,11 +1068,11 @@ public final class MainForm extends javax.swing.JFrame {
         pnlAccountSettingsMainLayout.setVerticalGroup(
             pnlAccountSettingsMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAccountSettingsMainLayout.createSequentialGroup()
-                .addGap(349, 349, 349)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDeleteAccount, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                .addGap(64, 64, 64))
+                .addGap(396, 396, 396)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDeleteAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlAccountSettingsLayout = new javax.swing.GroupLayout(pnlAccountSettings);
@@ -1249,11 +1326,6 @@ public final class MainForm extends javax.swing.JFrame {
 
   }//GEN-LAST:event_btnDeleteAccountActionPerformed
 
-  private void btnAccountSettingsBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountSettingsBackActionPerformed
-		refreshProjectView();
-		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
-  }//GEN-LAST:event_btnAccountSettingsBackActionPerformed
-
     private void btnInitialHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitialHelpActionPerformed
 		new Help().setVisible(true);
     }//GEN-LAST:event_btnInitialHelpActionPerformed
@@ -1274,6 +1346,26 @@ public final class MainForm extends javax.swing.JFrame {
 		this.currentUser = null;
 		cardLayoutMain.show(pnlMain, "InitialPanel");
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+		if (txtSearch.getText().equals("Enter search term to search for title")) {
+			txtSearch.setText("");
+		}
+    }//GEN-LAST:event_txtSearchFocusGained
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+		if (txtSearch.getText().equals("")) {
+			txtSearch.setText("Enter search term to search for title");
+		}
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+		this.refreshProjectView();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 	/**
 	 * The main method to initialize the program.
@@ -1297,7 +1389,6 @@ public final class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccountSettings;
-    private javax.swing.JToggleButton btnAccountSettingsBack;
     private javax.swing.JButton btnDeleteAccount;
     private javax.swing.JButton btnInitialHelp;
     private javax.swing.JButton btnLogout;
@@ -1306,6 +1397,7 @@ public final class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnNewProjectToolbar;
     private javax.swing.JButton btnNewProjectViewBack;
     private javax.swing.JButton btnRefreshToolBar;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnSignIn;
     private javax.swing.JButton btnSignInHelp;
     private javax.swing.JButton btnSignInSignIn;
@@ -1314,7 +1406,10 @@ public final class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSignUpInsteadSignUp;
     private javax.swing.JButton btnSignUpSignUp;
     private javax.swing.JButton btnSignupHelp;
+    private javax.swing.JComboBox<String> cbOrderBy;
+    private javax.swing.JComboBox<String> cbOrderByDirection;
     private com.toedter.calendar.JDateChooser dcDOBSignUp;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblAccountIcon;
     private javax.swing.JLabel lblAccountName;
     private javax.swing.JLabel lblAccountSettings;
@@ -1328,6 +1423,7 @@ public final class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblFirstNameSignUp;
     private javax.swing.JLabel lblNewProjectDescription;
     private javax.swing.JLabel lblNewProjectTitle;
+    private javax.swing.JLabel lblOrderBy;
     private javax.swing.JLabel lblPasswordSignIn;
     private javax.swing.JLabel lblPasswordSignUp;
     private javax.swing.JLabel lblPasswordStrengthSignUp;
@@ -1355,6 +1451,7 @@ public final class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel pnlProjectListMain;
     private javax.swing.JScrollPane pnlProjectListScroll;
     private javax.swing.JPanel pnlProjectListToolBar;
+    private javax.swing.JPanel pnlSearchSort;
     private javax.swing.JPanel pnlSidePane;
     private javax.swing.JPanel pnlSignIn;
     private javax.swing.JPanel pnlSignInContainer;
@@ -1369,6 +1466,7 @@ public final class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtNewProjectTitle;
     private javax.swing.JPasswordField txtPasswordSignIn;
     private javax.swing.JPasswordField txtPasswordSignUp;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSurnameSignUp;
     private javax.swing.JTextField txtUsernameSignIn;
     private javax.swing.JTextField txtUsernameSignUp;
