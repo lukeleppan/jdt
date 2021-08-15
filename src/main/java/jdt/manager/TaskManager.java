@@ -58,6 +58,12 @@ public class TaskManager {
 		return projectTaskList;
 	}
 
+	/**
+	 * Update a task
+	 *
+	 * @param updatedTask The task to apply updates to
+	 * @return -1 if the task failed to update.
+	 */
 	public int updateTask(Task updatedTask) {
 		return dbCon.update(
 				"UPDATE tasks SET taskTitle = ?, taskDescription = ?, taskState = ? WHERE taskID = ?;",

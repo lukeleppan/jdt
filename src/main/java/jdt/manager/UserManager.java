@@ -5,17 +5,27 @@ import jdt.data.User;
 import jdt.data.UserCreds;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manager for users table in the database.
+ *
+ * @author Luke Leppan
+ */
 public class UserManager {
 
 	private final DBConnection dbCon = new DBConnection();
 
+	/**
+	 * Checks for a user with a given username.
+	 *
+	 * @param username The username to check for.
+	 *
+	 * @return true if user exists, otherwise false.
+	 */
 	public boolean checkForUser(String username) {
 		boolean exists = false;
 
@@ -40,6 +50,14 @@ public class UserManager {
 		return exists;
 	}
 
+	/**
+	 * Registers a user with given User and UserCreds objects.
+	 *
+	 * @param user the user object to insert into the database.
+	 * @param userCreds the usercreds object to insert into the database.
+	 *
+	 * @return true if the user was registered correctly.
+	 */
 	public boolean registerUser(User user, UserCreds userCreds) {
 		boolean success = false;
 		int userID = 0;
@@ -76,6 +94,14 @@ public class UserManager {
 		return success;
 	}
 
+	/**
+	 * Logs a user in given the correct username and password.
+	 *
+	 * @param username The username of the user to login
+	 * @param password The password of the user to login
+	 *
+	 * @return true if the user is authenticated successfully, otherwise false.
+	 */
 	public boolean loginUser(String username, String password) {
 		boolean success = false;
 		PasswordAuth pwAuth = new PasswordAuth();
@@ -101,6 +127,13 @@ public class UserManager {
 		return success;
 	}
 
+	/**
+	 * Get a User object from a given username.
+	 *
+	 * @param username the username from which the User object will be gathered.
+	 *
+	 * @return A user object from the given username.
+	 */
 	public User getUser(String username) {
 		User user = null;
 		int userID = -1;
@@ -147,6 +180,12 @@ public class UserManager {
 		return user;
 	}
 
+	/**
+	 * Delete an Account given a username
+	 *
+	 * @param username The username of user to delete.
+	 * @return -1 if failed to delete user.
+	 */
 	public int deleteAccount(String username) {
 		return dbCon.update("DELETE * FROM usercreds WHERE username = ?;", new Object[]{username});
 	}
