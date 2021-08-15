@@ -148,6 +148,6 @@ public class UserManager {
 	}
 
 	public int deleteAccount(String username) {
-		return dbCon.update("DELETE * FROM usercreds WHERE username = '?';", new String[]{username});
+		return dbCon.update("DELETE * FROM usercreds WHERE username = ?;", new Object[]{username});
 	}
 }

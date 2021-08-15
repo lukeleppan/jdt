@@ -44,16 +44,16 @@ public class MainForm extends javax.swing.JFrame {
 	}
 
 	public void refreshProjectView() {  //Loads Project Components for Project View
-		ScrollViewPV.removeAll();
-		ScrollViewPV.invalidate();
-		ScrollViewPV.validate();
-		ScrollViewPV.repaint();
+		pnlProjectListMain.removeAll();
+		pnlProjectListMain.invalidate();
+		pnlProjectListMain.validate();
+		pnlProjectListMain.repaint();
 		ProjectManager projectManager = new ProjectManager();
 		List<Project> projects = projectManager.getUserProjects(currentUser);
 		Dimension preferredSize = new Dimension(818, 210 * projects.size() + 10);
-		ScrollViewPV.setPreferredSize(preferredSize);
-		ProjectScrollViewPV.getVerticalScrollBar().setUnitIncrement(16);
-		ProjectScrollViewPV.getVerticalScrollBar().setAutoscrolls(false);
+		pnlProjectListMain.setPreferredSize(preferredSize);
+		pnlProjectListScroll.getVerticalScrollBar().setUnitIncrement(16);
+		pnlProjectListScroll.getVerticalScrollBar().setAutoscrolls(false);
 
 		for (int i = 0; i < projects.size(); i++) {
 			Project project = projects.get(i);
@@ -63,12 +63,12 @@ public class MainForm extends javax.swing.JFrame {
 			projectTile.setLocation(140, 206 * i + 5);
 			projectTile.setVisible(true);
 
-			ScrollViewPV.add(projectTile);
+			pnlProjectListMain.add(projectTile);
 		}
 
-		ScrollViewPV.invalidate();
-		ScrollViewPV.validate();
-		ScrollViewPV.repaint();
+		pnlProjectListMain.invalidate();
+		pnlProjectListMain.validate();
+		pnlProjectListMain.repaint();
 	}
 
 	private void setAccountDetails() {  // Sets the current users details
@@ -142,13 +142,13 @@ public class MainForm extends javax.swing.JFrame {
         btnInitialHelp = new javax.swing.JButton();
         pnlSignIn = new javax.swing.JPanel();
         pnlSignInContainer = new javax.swing.JPanel();
-        UsernameText = new javax.swing.JLabel();
-        UsernameField = new javax.swing.JTextField();
-        UsernameText2 = new javax.swing.JLabel();
-        SignInButtonLogPNL = new javax.swing.JButton();
-        PasswordField = new javax.swing.JPasswordField();
-        ErrorText = new javax.swing.JLabel();
-        SignUpInsteadButtonLogPNL = new javax.swing.JButton();
+        lblUsernameSignIn = new javax.swing.JLabel();
+        txtUsernameSignIn = new javax.swing.JTextField();
+        lblPasswordSignIn = new javax.swing.JLabel();
+        btnSignInSignIn = new javax.swing.JButton();
+        txtPasswordSignIn = new javax.swing.JPasswordField();
+        lblErrorText = new javax.swing.JLabel();
+        btnSignUpInsteadSignIn = new javax.swing.JButton();
         btnSignInHelp = new javax.swing.JButton();
         pnlSignUp = new javax.swing.JPanel();
         pnlSignUpContainer = new javax.swing.JPanel();
@@ -182,31 +182,32 @@ public class MainForm extends javax.swing.JFrame {
         lblAccountIcon = new javax.swing.JLabel();
         btnMainViewHelp = new javax.swing.JButton();
         pnlCardPV = new javax.swing.JPanel();
-        ProjectViewCardPV = new javax.swing.JPanel();
-        ProjectViewToolBarPV = new javax.swing.JPanel();
-        NewProjectButtonPV = new javax.swing.JButton();
-        RefreshButtonPV = new javax.swing.JButton();
-        ProjectScrollViewPV = new javax.swing.JScrollPane();
-        ScrollViewPV = new javax.swing.JPanel();
-        NewProjectViewPV = new javax.swing.JPanel();
-        NewProjectDetailsPV = new javax.swing.JPanel();
-        ProjectNameLabelNPPV = new javax.swing.JLabel();
-        ProjectNameTXTNPPV = new javax.swing.JTextField();
-        ProjectDescriptionLabelNPPV = new javax.swing.JLabel();
-        TextScrollNPPV = new javax.swing.JScrollPane();
-        DesriptionTextAreaNPPV = new javax.swing.JTextArea();
-        CreateProjectBTNNPPV = new javax.swing.JButton();
-        ErrorLabelNPPV = new javax.swing.JLabel();
-        ToolBarNPPV = new javax.swing.JPanel();
-        BackButton = new javax.swing.JButton();
-        SeperatorNPPV = new javax.swing.JSeparator();
-        AccountSettingsPanel = new javax.swing.JPanel();
-        AccountSettingToolbar = new javax.swing.JPanel();
-        AccounSettingsBackButton = new javax.swing.JToggleButton();
-        jLabel2 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jPanel2 = new javax.swing.JPanel();
-        DeleteAccountButton = new javax.swing.JButton();
+        pnlProjectListCard = new javax.swing.JPanel();
+        pnlProjectListToolBar = new javax.swing.JPanel();
+        btnNewProjectToolbar = new javax.swing.JButton();
+        btnRefreshToolBar = new javax.swing.JButton();
+        pnlProjectListScroll = new javax.swing.JScrollPane();
+        pnlProjectListMain = new javax.swing.JPanel();
+        pnlNewProjectView = new javax.swing.JPanel();
+        pnlNewProjectDetails = new javax.swing.JPanel();
+        lblNewProjectTitle = new javax.swing.JLabel();
+        txtNewProjectTitle = new javax.swing.JTextField();
+        lblNewProjectDescription = new javax.swing.JLabel();
+        txtaNewProjectDescriptionScroll = new javax.swing.JScrollPane();
+        txtaNewProjectDesriptionMain = new javax.swing.JTextArea();
+        btnNewProjectCreate = new javax.swing.JButton();
+        lblErrorTextNewProject = new javax.swing.JLabel();
+        pnlNewProjectViewToolBar = new javax.swing.JPanel();
+        btnNewProjectViewBack = new javax.swing.JButton();
+        sepNewProjectView = new javax.swing.JSeparator();
+        pnlAccountSettings = new javax.swing.JPanel();
+        pnlAccountSettingToolBar = new javax.swing.JPanel();
+        btnAccountSettingsBack = new javax.swing.JToggleButton();
+        lblAccountSettings = new javax.swing.JLabel();
+        sepAccountSetttings = new javax.swing.JSeparator();
+        pnlAccountSettingsMain = new javax.swing.JPanel();
+        btnDeleteAccount = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Just Do It");
@@ -342,34 +343,34 @@ public class MainForm extends javax.swing.JFrame {
 
         pnlSignInContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 20))); // NOI18N
 
-        UsernameText.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        UsernameText.setText("Username");
+        lblUsernameSignIn.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblUsernameSignIn.setText("Username");
 
-        UsernameField.setToolTipText("Enter your Username");
+        txtUsernameSignIn.setToolTipText("Enter your Username");
 
-        UsernameText2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        UsernameText2.setText("Password");
+        lblPasswordSignIn.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblPasswordSignIn.setText("Password");
 
-        SignInButtonLogPNL.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
-        SignInButtonLogPNL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/login.png"))); // NOI18N
-        SignInButtonLogPNL.setText("Sign in");
-        SignInButtonLogPNL.setToolTipText("Click To Sign in");
-        SignInButtonLogPNL.addActionListener(new java.awt.event.ActionListener() {
+        btnSignInSignIn.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
+        btnSignInSignIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/login.png"))); // NOI18N
+        btnSignInSignIn.setText("Sign in");
+        btnSignInSignIn.setToolTipText("Click To Sign in");
+        btnSignInSignIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SignInButtonLogPNLActionPerformed(evt);
+                btnSignInSignInActionPerformed(evt);
             }
         });
 
-        PasswordField.setToolTipText("Enter Password");
+        txtPasswordSignIn.setToolTipText("Enter Password");
 
-        ErrorText.setForeground(new java.awt.Color(255, 0, 51));
+        lblErrorText.setForeground(new java.awt.Color(255, 0, 51));
 
-        SignUpInsteadButtonLogPNL.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
-        SignUpInsteadButtonLogPNL.setText("Sign Up Instead");
-        SignUpInsteadButtonLogPNL.setToolTipText("Click to Sign Up");
-        SignUpInsteadButtonLogPNL.addActionListener(new java.awt.event.ActionListener() {
+        btnSignUpInsteadSignIn.setFont(new java.awt.Font("SansSerif", 1, 15)); // NOI18N
+        btnSignUpInsteadSignIn.setText("Sign Up Instead");
+        btnSignUpInsteadSignIn.setToolTipText("Click to Sign Up");
+        btnSignUpInsteadSignIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SignUpInsteadButtonLogPNLActionPerformed(evt);
+                btnSignUpInsteadSignInActionPerformed(evt);
             }
         });
 
@@ -379,39 +380,39 @@ public class MainForm extends javax.swing.JFrame {
             pnlSignInContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSignInContainerLayout.createSequentialGroup()
                 .addGap(86, 86, 86)
-                .addComponent(ErrorText, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblErrorText, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignInContainerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlSignInContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(PasswordField)
-                    .addComponent(UsernameField)
+                    .addComponent(txtPasswordSignIn)
+                    .addComponent(txtUsernameSignIn)
                     .addGroup(pnlSignInContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(pnlSignInContainerLayout.createSequentialGroup()
-                            .addComponent(SignUpInsteadButtonLogPNL)
+                            .addComponent(btnSignUpInsteadSignIn)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(SignInButtonLogPNL))
-                        .addComponent(UsernameText2, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(UsernameText, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addComponent(btnSignInSignIn))
+                        .addComponent(lblPasswordSignIn, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblUsernameSignIn, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addGap(39, 39, 39))
         );
         pnlSignInContainerLayout.setVerticalGroup(
             pnlSignInContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSignInContainerLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(UsernameText)
+                .addComponent(lblUsernameSignIn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UsernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtUsernameSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UsernameText2)
+                .addComponent(lblPasswordSignIn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtPasswordSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlSignInContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(SignInButtonLogPNL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(SignUpInsteadButtonLogPNL, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSignInSignIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSignUpInsteadSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(266, 266, 266)
-                .addComponent(ErrorText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblErrorText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -465,7 +466,7 @@ public class MainForm extends javax.swing.JFrame {
         txtSurnameSignUp.setNextFocusableComponent(txtUsernameSignUp);
 
         lblUsernameSignUp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblUsernameSignUp.setLabelFor(UsernameField);
+        lblUsernameSignUp.setLabelFor(txtUsernameSignIn);
         lblUsernameSignUp.setText("Username");
 
         txtUsernameSignUp.setToolTipText("Enter Username");
@@ -753,281 +754,293 @@ public class MainForm extends javax.swing.JFrame {
         pnlCardPV.setPreferredSize(new java.awt.Dimension(670, 578));
         pnlCardPV.setLayout(new java.awt.CardLayout());
 
-        ProjectViewCardPV.setPreferredSize(new java.awt.Dimension(620, 578));
-        ProjectViewCardPV.addContainerListener(new java.awt.event.ContainerAdapter() {
+        pnlProjectListCard.setPreferredSize(new java.awt.Dimension(620, 578));
+        pnlProjectListCard.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
-                ProjectViewCardPVComponentAdded(evt);
+                pnlProjectListCardComponentAdded(evt);
             }
         });
-        ProjectViewCardPV.addComponentListener(new java.awt.event.ComponentAdapter() {
+        pnlProjectListCard.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
-                ProjectViewCardPVComponentShown(evt);
+                pnlProjectListCardComponentShown(evt);
             }
         });
 
-        NewProjectButtonPV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
-        NewProjectButtonPV.setText("New Project");
-        NewProjectButtonPV.setToolTipText("Click to create new project");
-        NewProjectButtonPV.addActionListener(new java.awt.event.ActionListener() {
+        btnNewProjectToolbar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
+        btnNewProjectToolbar.setText("New Project");
+        btnNewProjectToolbar.setToolTipText("Click to create new project");
+        btnNewProjectToolbar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewProjectButtonPVActionPerformed(evt);
+                btnNewProjectToolbarActionPerformed(evt);
             }
         });
 
-        RefreshButtonPV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/refresh.png"))); // NOI18N
-        RefreshButtonPV.setText("Refresh");
-        RefreshButtonPV.addActionListener(new java.awt.event.ActionListener() {
+        btnRefreshToolBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/refresh.png"))); // NOI18N
+        btnRefreshToolBar.setText("Refresh");
+        btnRefreshToolBar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RefreshButtonPVActionPerformed(evt);
+                btnRefreshToolBarActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout ProjectViewToolBarPVLayout = new javax.swing.GroupLayout(ProjectViewToolBarPV);
-        ProjectViewToolBarPV.setLayout(ProjectViewToolBarPVLayout);
-        ProjectViewToolBarPVLayout.setHorizontalGroup(
-            ProjectViewToolBarPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ProjectViewToolBarPVLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlProjectListToolBarLayout = new javax.swing.GroupLayout(pnlProjectListToolBar);
+        pnlProjectListToolBar.setLayout(pnlProjectListToolBarLayout);
+        pnlProjectListToolBarLayout.setHorizontalGroup(
+            pnlProjectListToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectListToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(NewProjectButtonPV, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNewProjectToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(RefreshButtonPV, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRefreshToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        ProjectViewToolBarPVLayout.setVerticalGroup(
-            ProjectViewToolBarPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ProjectViewToolBarPVLayout.createSequentialGroup()
+        pnlProjectListToolBarLayout.setVerticalGroup(
+            pnlProjectListToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectListToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(ProjectViewToolBarPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NewProjectButtonPV, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RefreshButtonPV, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(pnlProjectListToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNewProjectToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefreshToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        ProjectScrollViewPV.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        ProjectScrollViewPV.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        pnlProjectListScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        pnlProjectListScroll.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        javax.swing.GroupLayout ScrollViewPVLayout = new javax.swing.GroupLayout(ScrollViewPV);
-        ScrollViewPV.setLayout(ScrollViewPVLayout);
-        ScrollViewPVLayout.setHorizontalGroup(
-            ScrollViewPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlProjectListMainLayout = new javax.swing.GroupLayout(pnlProjectListMain);
+        pnlProjectListMain.setLayout(pnlProjectListMainLayout);
+        pnlProjectListMainLayout.setHorizontalGroup(
+            pnlProjectListMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 818, Short.MAX_VALUE)
         );
-        ScrollViewPVLayout.setVerticalGroup(
-            ScrollViewPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlProjectListMainLayout.setVerticalGroup(
+            pnlProjectListMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 545, Short.MAX_VALUE)
         );
 
-        ProjectScrollViewPV.setViewportView(ScrollViewPV);
+        pnlProjectListScroll.setViewportView(pnlProjectListMain);
 
-        javax.swing.GroupLayout ProjectViewCardPVLayout = new javax.swing.GroupLayout(ProjectViewCardPV);
-        ProjectViewCardPV.setLayout(ProjectViewCardPVLayout);
-        ProjectViewCardPVLayout.setHorizontalGroup(
-            ProjectViewCardPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ProjectViewCardPVLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlProjectListCardLayout = new javax.swing.GroupLayout(pnlProjectListCard);
+        pnlProjectListCard.setLayout(pnlProjectListCardLayout);
+        pnlProjectListCardLayout.setHorizontalGroup(
+            pnlProjectListCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectListCardLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(ProjectViewCardPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ProjectScrollViewPV, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
-                    .addGroup(ProjectViewCardPVLayout.createSequentialGroup()
-                        .addComponent(ProjectViewToolBarPV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlProjectListCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlProjectListScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+                    .addGroup(pnlProjectListCardLayout.createSequentialGroup()
+                        .addComponent(pnlProjectListToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
-        ProjectViewCardPVLayout.setVerticalGroup(
-            ProjectViewCardPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ProjectViewCardPVLayout.createSequentialGroup()
-                .addComponent(ProjectViewToolBarPV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        pnlProjectListCardLayout.setVerticalGroup(
+            pnlProjectListCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlProjectListCardLayout.createSequentialGroup()
+                .addComponent(pnlProjectListToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProjectScrollViewPV))
+                .addComponent(pnlProjectListScroll))
         );
 
-        pnlCardPV.add(ProjectViewCardPV, "ProjectViewPV");
+        pnlCardPV.add(pnlProjectListCard, "ProjectViewPV");
 
-        NewProjectDetailsPV.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create New Project", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("sansserif", 1, 16))); // NOI18N
+        pnlNewProjectDetails.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create New Project", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("sansserif", 1, 16))); // NOI18N
 
-        ProjectNameLabelNPPV.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        ProjectNameLabelNPPV.setText("Project Title");
+        lblNewProjectTitle.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        lblNewProjectTitle.setText("Project Title");
 
-        ProjectDescriptionLabelNPPV.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        ProjectDescriptionLabelNPPV.setText("Project Description");
+        lblNewProjectDescription.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        lblNewProjectDescription.setText("Project Description");
 
-        DesriptionTextAreaNPPV.setColumns(20);
-        DesriptionTextAreaNPPV.setLineWrap(true);
-        DesriptionTextAreaNPPV.setRows(5);
-        TextScrollNPPV.setViewportView(DesriptionTextAreaNPPV);
+        txtaNewProjectDesriptionMain.setColumns(20);
+        txtaNewProjectDesriptionMain.setLineWrap(true);
+        txtaNewProjectDesriptionMain.setRows(5);
+        txtaNewProjectDescriptionScroll.setViewportView(txtaNewProjectDesriptionMain);
 
-        CreateProjectBTNNPPV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
-        CreateProjectBTNNPPV.setText("Create");
-        CreateProjectBTNNPPV.addActionListener(new java.awt.event.ActionListener() {
+        btnNewProjectCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/add.png"))); // NOI18N
+        btnNewProjectCreate.setText("Create");
+        btnNewProjectCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CreateProjectBTNNPPVActionPerformed(evt);
+                btnNewProjectCreateActionPerformed(evt);
             }
         });
 
-        ErrorLabelNPPV.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        ErrorLabelNPPV.setForeground(new java.awt.Color(204, 0, 0));
+        lblErrorTextNewProject.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        lblErrorTextNewProject.setForeground(new java.awt.Color(204, 0, 0));
 
-        javax.swing.GroupLayout NewProjectDetailsPVLayout = new javax.swing.GroupLayout(NewProjectDetailsPV);
-        NewProjectDetailsPV.setLayout(NewProjectDetailsPVLayout);
-        NewProjectDetailsPVLayout.setHorizontalGroup(
-            NewProjectDetailsPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NewProjectDetailsPVLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlNewProjectDetailsLayout = new javax.swing.GroupLayout(pnlNewProjectDetails);
+        pnlNewProjectDetails.setLayout(pnlNewProjectDetailsLayout);
+        pnlNewProjectDetailsLayout.setHorizontalGroup(
+            pnlNewProjectDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewProjectDetailsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CreateProjectBTNNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNewProjectCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
-            .addGroup(NewProjectDetailsPVLayout.createSequentialGroup()
+            .addGroup(pnlNewProjectDetailsLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(NewProjectDetailsPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ProjectDescriptionLabelNPPV)
-                    .addComponent(ProjectNameLabelNPPV)
-                    .addGroup(NewProjectDetailsPVLayout.createSequentialGroup()
+                .addGroup(pnlNewProjectDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblNewProjectDescription)
+                    .addComponent(lblNewProjectTitle)
+                    .addGroup(pnlNewProjectDetailsLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(ErrorLabelNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(ProjectNameTXTNPPV)
-                    .addComponent(TextScrollNPPV))
+                        .addComponent(lblErrorTextNewProject, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNewProjectTitle)
+                    .addComponent(txtaNewProjectDescriptionScroll))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
-        NewProjectDetailsPVLayout.setVerticalGroup(
-            NewProjectDetailsPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(NewProjectDetailsPVLayout.createSequentialGroup()
+        pnlNewProjectDetailsLayout.setVerticalGroup(
+            pnlNewProjectDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlNewProjectDetailsLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(ProjectNameLabelNPPV)
+                .addComponent(lblNewProjectTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ProjectNameTXTNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNewProjectTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(ProjectDescriptionLabelNPPV)
+                .addComponent(lblNewProjectDescription)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TextScrollNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtaNewProjectDescriptionScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ErrorLabelNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblErrorTextNewProject, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(CreateProjectBTNNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNewProjectCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
 
-        BackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/back_green.png"))); // NOI18N
-        BackButton.setText("Back");
-        BackButton.addActionListener(new java.awt.event.ActionListener() {
+        btnNewProjectViewBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/back_green.png"))); // NOI18N
+        btnNewProjectViewBack.setText("Back");
+        btnNewProjectViewBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BackButtonActionPerformed(evt);
+                btnNewProjectViewBackActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout ToolBarNPPVLayout = new javax.swing.GroupLayout(ToolBarNPPV);
-        ToolBarNPPV.setLayout(ToolBarNPPVLayout);
-        ToolBarNPPVLayout.setHorizontalGroup(
-            ToolBarNPPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ToolBarNPPVLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlNewProjectViewToolBarLayout = new javax.swing.GroupLayout(pnlNewProjectViewToolBar);
+        pnlNewProjectViewToolBar.setLayout(pnlNewProjectViewToolBarLayout);
+        pnlNewProjectViewToolBarLayout.setHorizontalGroup(
+            pnlNewProjectViewToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlNewProjectViewToolBarLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(BackButton)
+                .addComponent(btnNewProjectViewBack)
                 .addContainerGap(570, Short.MAX_VALUE))
-            .addGroup(ToolBarNPPVLayout.createSequentialGroup()
-                .addComponent(SeperatorNPPV)
+            .addGroup(pnlNewProjectViewToolBarLayout.createSequentialGroup()
+                .addComponent(sepNewProjectView)
                 .addContainerGap())
         );
-        ToolBarNPPVLayout.setVerticalGroup(
-            ToolBarNPPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ToolBarNPPVLayout.createSequentialGroup()
+        pnlNewProjectViewToolBarLayout.setVerticalGroup(
+            pnlNewProjectViewToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlNewProjectViewToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNewProjectViewBack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SeperatorNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(sepNewProjectView, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        javax.swing.GroupLayout NewProjectViewPVLayout = new javax.swing.GroupLayout(NewProjectViewPV);
-        NewProjectViewPV.setLayout(NewProjectViewPVLayout);
-        NewProjectViewPVLayout.setHorizontalGroup(
-            NewProjectViewPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ToolBarNPPV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(NewProjectViewPVLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlNewProjectViewLayout = new javax.swing.GroupLayout(pnlNewProjectView);
+        pnlNewProjectView.setLayout(pnlNewProjectViewLayout);
+        pnlNewProjectViewLayout.setHorizontalGroup(
+            pnlNewProjectViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlNewProjectViewToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlNewProjectViewLayout.createSequentialGroup()
                 .addGap(121, 121, 121)
-                .addComponent(NewProjectDetailsPV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlNewProjectDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        NewProjectViewPVLayout.setVerticalGroup(
-            NewProjectViewPVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NewProjectViewPVLayout.createSequentialGroup()
-                .addComponent(ToolBarNPPV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        pnlNewProjectViewLayout.setVerticalGroup(
+            pnlNewProjectViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlNewProjectViewLayout.createSequentialGroup()
+                .addComponent(pnlNewProjectViewToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
-                .addComponent(NewProjectDetailsPV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlNewProjectDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(116, Short.MAX_VALUE))
         );
 
-        pnlCardPV.add(NewProjectViewPV, "NewProject");
+        pnlCardPV.add(pnlNewProjectView, "NewProject");
 
-        AccounSettingsBackButton.setText("Back");
-        AccounSettingsBackButton.addActionListener(new java.awt.event.ActionListener() {
+        btnAccountSettingsBack.setText("Back");
+        btnAccountSettingsBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AccounSettingsBackButtonActionPerformed(evt);
+                btnAccountSettingsBackActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel2.setText("Account Settings");
+        lblAccountSettings.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lblAccountSettings.setText("Account Settings");
 
-        javax.swing.GroupLayout AccountSettingToolbarLayout = new javax.swing.GroupLayout(AccountSettingToolbar);
-        AccountSettingToolbar.setLayout(AccountSettingToolbarLayout);
-        AccountSettingToolbarLayout.setHorizontalGroup(
-            AccountSettingToolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AccountSettingToolbarLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlAccountSettingToolBarLayout = new javax.swing.GroupLayout(pnlAccountSettingToolBar);
+        pnlAccountSettingToolBar.setLayout(pnlAccountSettingToolBarLayout);
+        pnlAccountSettingToolBarLayout.setHorizontalGroup(
+            pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAccountSettingToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(AccounSettingsBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAccountSettingsBack, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(164, 164, 164)
-                .addComponent(jLabel2)
+                .addComponent(lblAccountSettings)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(sepAccountSetttings, javax.swing.GroupLayout.Alignment.TRAILING)
         );
-        AccountSettingToolbarLayout.setVerticalGroup(
-            AccountSettingToolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AccountSettingToolbarLayout.createSequentialGroup()
+        pnlAccountSettingToolBarLayout.setVerticalGroup(
+            pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAccountSettingToolBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(AccountSettingToolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AccounSettingsBackButton, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlAccountSettingToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAccountSettingsBack, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(lblAccountSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(sepAccountSetttings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        DeleteAccountButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/delete.png"))); // NOI18N
-        DeleteAccountButton.setText("Delete Account");
-        DeleteAccountButton.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/delete.png"))); // NOI18N
+        btnDeleteAccount.setText("Delete Account");
+        btnDeleteAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteAccountButtonActionPerformed(evt);
+                btnDeleteAccountActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdt/images/back.png"))); // NOI18N
+        btnLogout.setText("Log Out");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlAccountSettingsMainLayout = new javax.swing.GroupLayout(pnlAccountSettingsMain);
+        pnlAccountSettingsMain.setLayout(pnlAccountSettingsMainLayout);
+        pnlAccountSettingsMainLayout.setHorizontalGroup(
+            pnlAccountSettingsMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAccountSettingsMainLayout.createSequentialGroup()
                 .addGap(268, 268, 268)
-                .addComponent(DeleteAccountButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlAccountSettingsMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeleteAccount, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
                 .addGap(249, 249, 249))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(420, 420, 420)
-                .addComponent(DeleteAccountButton, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+        pnlAccountSettingsMainLayout.setVerticalGroup(
+            pnlAccountSettingsMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAccountSettingsMainLayout.createSequentialGroup()
+                .addGap(349, 349, 349)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeleteAccount, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
                 .addGap(64, 64, 64))
         );
 
-        javax.swing.GroupLayout AccountSettingsPanelLayout = new javax.swing.GroupLayout(AccountSettingsPanel);
-        AccountSettingsPanel.setLayout(AccountSettingsPanelLayout);
-        AccountSettingsPanelLayout.setHorizontalGroup(
-            AccountSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AccountSettingsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlAccountSettingsLayout = new javax.swing.GroupLayout(pnlAccountSettings);
+        pnlAccountSettings.setLayout(pnlAccountSettingsLayout);
+        pnlAccountSettingsLayout.setHorizontalGroup(
+            pnlAccountSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAccountSettingsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(AccountSettingToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlAccountSettingToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlAccountSettingsMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        AccountSettingsPanelLayout.setVerticalGroup(
-            AccountSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AccountSettingsPanelLayout.createSequentialGroup()
-                .addComponent(AccountSettingToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        pnlAccountSettingsLayout.setVerticalGroup(
+            pnlAccountSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAccountSettingsLayout.createSequentialGroup()
+                .addComponent(pnlAccountSettingToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlAccountSettingsMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlCardPV.add(AccountSettingsPanel, "AccountSettings");
+        pnlCardPV.add(pnlAccountSettings, "AccountSettings");
 
         pnlMainSplit.setRightComponent(pnlCardPV);
 
@@ -1066,16 +1079,18 @@ public class MainForm extends javax.swing.JFrame {
 		cardLayoutMain.show(pnlMain, "LoginPanel");  // Switch to Login View
     }//GEN-LAST:event_btnSignInActionPerformed
 
-        private void SignInButtonLogPNLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignInButtonLogPNLActionPerformed
+        private void btnSignInSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInSignInActionPerformed
 		// Sign In Logic
 
 		UserManager userManager = new UserManager();
-		if (userManager.loginUser(UsernameField.getText(), new String(PasswordField.getPassword()))) {
-			currentUsername = UsernameField.getText();
+		if (userManager.loginUser(txtUsernameSignIn.getText(), new String(txtPasswordSignIn.getPassword()))) {
+			currentUsername = txtUsernameSignIn.getText();
 			currentUser = userManager.getUser(currentUsername);
 			cardLayoutMain.show(pnlMain, "ProjectList");
 			refreshProjectView();
 			setAccountDetails();
+			txtUsernameSignIn.setText("");
+			txtPasswordSignIn.setText("");
 			JOptionPane.showMessageDialog(this,
 					"✔ Successful Login"
 					+ "\nWelcome " + currentUser.getUserFirstName()
@@ -1086,11 +1101,11 @@ public class MainForm extends javax.swing.JFrame {
 					+ "\nPlease Try Again"
 			);
 		}
-        }//GEN-LAST:event_SignInButtonLogPNLActionPerformed
+        }//GEN-LAST:event_btnSignInSignInActionPerformed
 
-        private void SignUpInsteadButtonLogPNLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpInsteadButtonLogPNLActionPerformed
+        private void btnSignUpInsteadSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpInsteadSignInActionPerformed
 		cardLayoutMain.show(pnlMain, "RegisterPanel"); //Switch to Register Panel
-        }//GEN-LAST:event_SignUpInsteadButtonLogPNLActionPerformed
+        }//GEN-LAST:event_btnSignUpInsteadSignInActionPerformed
 
         private void btnSignUpSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpSignUpActionPerformed
 		// Sign In Logic
@@ -1152,6 +1167,12 @@ public class MainForm extends javax.swing.JFrame {
 			errorText = "Username is already taken.";
 		} else if (userManager.registerUser(user, userCreds)) {
 			cardLayoutMain.show(pnlMain, "LoginPanel");
+			txtUsernameSignUp.setText("");
+			txtFirstNameSignUp.setText("");
+			txtSurnameSignUp.setText("");
+			txtEmailSignUp.setText("");
+			txtPasswordSignUp.setText("");
+			txtConfirmPasswordSignUp.setText("");
 			JOptionPane.showMessageDialog(this,
 					"Successfully Registered ✔"
 					+ "\nPlease Login"
@@ -1212,22 +1233,22 @@ public class MainForm extends javax.swing.JFrame {
 
   }//GEN-LAST:event_txtPasswordSignUpPropertyChange
 
-  private void NewProjectButtonPVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProjectButtonPVActionPerformed
+  private void btnNewProjectToolbarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewProjectToolbarActionPerformed
 		cardLayoutPV.show(pnlCardPV, "NewProject");
-  }//GEN-LAST:event_NewProjectButtonPVActionPerformed
+  }//GEN-LAST:event_btnNewProjectToolbarActionPerformed
 
-  private void CreateProjectBTNNPPVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProjectBTNNPPVActionPerformed
+  private void btnNewProjectCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewProjectCreateActionPerformed
 		ProjectManager projectManager = new ProjectManager();
 
-		if (ProjectNameTXTNPPV.getText().equals("")) {
-			ErrorLabelNPPV.setText("Please Enter the Project Title");
-		} else if (ProjectDescriptionLabelNPPV.getText().equals("")) {
-			ErrorLabelNPPV.setText("Please Enter the Project Description");
-		} else if (ProjectNameTXTNPPV.getText().length() > 100) {
-			ErrorLabelNPPV.setText("Title is too long");
-		} else if (ProjectDescriptionLabelNPPV.getText().length() > 300) {
-			ErrorLabelNPPV.setText("Desription is too long");
-		} else if (!(projectManager.createProject(ProjectNameTXTNPPV.getText(), DesriptionTextAreaNPPV.getText(), currentUser) <= -1)) {
+		if (txtNewProjectTitle.getText().equals("")) {
+			lblErrorTextNewProject.setText("Please Enter the Project Title");
+		} else if (lblNewProjectDescription.getText().equals("")) {
+			lblErrorTextNewProject.setText("Please Enter the Project Description");
+		} else if (txtNewProjectTitle.getText().length() > 100) {
+			lblErrorTextNewProject.setText("Title is too long");
+		} else if (lblNewProjectDescription.getText().length() > 300) {
+			lblErrorTextNewProject.setText("Desription is too long");
+		} else if (!(projectManager.createProject(txtNewProjectTitle.getText(), txtaNewProjectDesriptionMain.getText(), currentUser) <= -1)) {
 			cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
 			refreshProjectView();
 			JOptionPane.showMessageDialog(this,
@@ -1235,41 +1256,49 @@ public class MainForm extends javax.swing.JFrame {
 					+ "\nClick Refresh to see it"
 			);
 		}
-  }//GEN-LAST:event_CreateProjectBTNNPPVActionPerformed
+  }//GEN-LAST:event_btnNewProjectCreateActionPerformed
 
-  private void RefreshButtonPVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonPVActionPerformed
+  private void btnRefreshToolBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshToolBarActionPerformed
 		pnlCardPV.repaint();
 		refreshProjectView();
 		pnlCardPV.repaint();
-  }//GEN-LAST:event_RefreshButtonPVActionPerformed
+  }//GEN-LAST:event_btnRefreshToolBarActionPerformed
 
-  private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
+  private void btnNewProjectViewBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewProjectViewBackActionPerformed
 		cardLayoutPV.show(pnlCardPV, "NewProject");
 		refreshProjectView();
 		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
-  }//GEN-LAST:event_BackButtonActionPerformed
+  }//GEN-LAST:event_btnNewProjectViewBackActionPerformed
 
   private void btnAccountSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountSettingsActionPerformed
 		cardLayoutPV.show(pnlCardPV, "AccountSettings");
   }//GEN-LAST:event_btnAccountSettingsActionPerformed
 
-  private void DeleteAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAccountButtonActionPerformed
+  private void btnDeleteAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAccountActionPerformed
 		UserManager userManager = new UserManager();
-		userManager.deleteAccount(currentUsername);
-  }//GEN-LAST:event_DeleteAccountButtonActionPerformed
+		if (!(userManager.deleteAccount(currentUsername) <= -1)) {
+			this.currentUser = null;
+			this.currentUsername = "";
+			cardLayoutMain.show(pnlMain, "InitialPanel");
+			JOptionPane.showMessageDialog(this, "User Deleted");
+		} else {
+			JOptionPane.showMessageDialog(this, "Failed to delete User");
+		}
 
-  private void ProjectViewCardPVComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ProjectViewCardPVComponentAdded
+  }//GEN-LAST:event_btnDeleteAccountActionPerformed
 
-  }//GEN-LAST:event_ProjectViewCardPVComponentAdded
+  private void pnlProjectListCardComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_pnlProjectListCardComponentAdded
 
-  private void ProjectViewCardPVComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ProjectViewCardPVComponentShown
+  }//GEN-LAST:event_pnlProjectListCardComponentAdded
 
-  }//GEN-LAST:event_ProjectViewCardPVComponentShown
+  private void pnlProjectListCardComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_pnlProjectListCardComponentShown
 
-  private void AccounSettingsBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccounSettingsBackButtonActionPerformed
+  }//GEN-LAST:event_pnlProjectListCardComponentShown
+
+  private void btnAccountSettingsBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountSettingsBackActionPerformed
 		refreshProjectView();
 		cardLayoutPV.show(pnlCardPV, "ProjectViewPV");
-  }//GEN-LAST:event_AccounSettingsBackButtonActionPerformed
+  }//GEN-LAST:event_btnAccountSettingsBackActionPerformed
 
     private void btnInitialHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitialHelpActionPerformed
 		new Help().setVisible(true);
@@ -1286,6 +1315,11 @@ public class MainForm extends javax.swing.JFrame {
     private void btnSignInHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInHelpActionPerformed
 		new Help().setVisible(true);
     }//GEN-LAST:event_btnSignInHelpActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+		this.currentUser = null;
+		cardLayoutMain.show(pnlMain, "InitialPanel");
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -1306,82 +1340,83 @@ public class MainForm extends javax.swing.JFrame {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton AccounSettingsBackButton;
-    private javax.swing.JPanel AccountSettingToolbar;
-    private javax.swing.JPanel AccountSettingsPanel;
-    private javax.swing.JButton BackButton;
-    private javax.swing.JButton CreateProjectBTNNPPV;
-    private javax.swing.JButton DeleteAccountButton;
-    private javax.swing.JTextArea DesriptionTextAreaNPPV;
-    private javax.swing.JLabel ErrorLabelNPPV;
-    private javax.swing.JLabel ErrorText;
-    private javax.swing.JButton NewProjectButtonPV;
-    private javax.swing.JPanel NewProjectDetailsPV;
-    private javax.swing.JPanel NewProjectViewPV;
-    private javax.swing.JPasswordField PasswordField;
-    private javax.swing.JLabel ProjectDescriptionLabelNPPV;
-    private javax.swing.JLabel ProjectNameLabelNPPV;
-    private javax.swing.JTextField ProjectNameTXTNPPV;
-    private javax.swing.JScrollPane ProjectScrollViewPV;
-    private javax.swing.JPanel ProjectViewCardPV;
-    private javax.swing.JPanel ProjectViewToolBarPV;
-    private javax.swing.JButton RefreshButtonPV;
-    private javax.swing.JPanel ScrollViewPV;
-    private javax.swing.JSeparator SeperatorNPPV;
-    private javax.swing.JButton SignInButtonLogPNL;
-    private javax.swing.JButton SignUpInsteadButtonLogPNL;
-    private javax.swing.JScrollPane TextScrollNPPV;
-    private javax.swing.JPanel ToolBarNPPV;
-    private javax.swing.JTextField UsernameField;
-    private javax.swing.JLabel UsernameText;
-    private javax.swing.JLabel UsernameText2;
     private javax.swing.JButton btnAccountSettings;
+    private javax.swing.JToggleButton btnAccountSettingsBack;
+    private javax.swing.JButton btnDeleteAccount;
     private javax.swing.JButton btnInitialHelp;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnMainViewHelp;
+    private javax.swing.JButton btnNewProjectCreate;
+    private javax.swing.JButton btnNewProjectToolbar;
+    private javax.swing.JButton btnNewProjectViewBack;
+    private javax.swing.JButton btnRefreshToolBar;
     private javax.swing.JButton btnSignIn;
     private javax.swing.JButton btnSignInHelp;
+    private javax.swing.JButton btnSignInSignIn;
     private javax.swing.JButton btnSignUp;
+    private javax.swing.JButton btnSignUpInsteadSignIn;
     private javax.swing.JButton btnSignUpInsteadSignUp;
     private javax.swing.JButton btnSignUpSignUp;
     private javax.swing.JButton btnSignupHelp;
     private com.toedter.calendar.JDateChooser dcDOBSignUp;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAccountIcon;
     private javax.swing.JLabel lblAccountName;
+    private javax.swing.JLabel lblAccountSettings;
     private javax.swing.JLabel lblAccountUsername;
     private javax.swing.JLabel lblConfirmPasswordSignUp;
     private javax.swing.JLabel lblDOBSignUP;
     private javax.swing.JLabel lblEmailSignUp;
     private javax.swing.JLabel lblErrorSignUp;
+    private javax.swing.JLabel lblErrorText;
+    private javax.swing.JLabel lblErrorTextNewProject;
     private javax.swing.JLabel lblFirstNameSignUp;
+    private javax.swing.JLabel lblNewProjectDescription;
+    private javax.swing.JLabel lblNewProjectTitle;
+    private javax.swing.JLabel lblPasswordSignIn;
     private javax.swing.JLabel lblPasswordSignUp;
     private javax.swing.JLabel lblPasswordStrengthSignUp;
     private javax.swing.JLabel lblSubtitle;
     private javax.swing.JLabel lblSurnameSignUp;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblUsernameSignIn;
     private javax.swing.JLabel lblUsernameSignUp;
     private javax.swing.JProgressBar pbarPasswordStrengthSignUp;
     private javax.swing.JPanel pnlAccount;
+    private javax.swing.JPanel pnlAccountSettingToolBar;
+    private javax.swing.JPanel pnlAccountSettings;
+    private javax.swing.JPanel pnlAccountSettingsMain;
     private javax.swing.JPanel pnlButtonContainer;
     public static javax.swing.JPanel pnlCardPV;
     private javax.swing.JPanel pnlInitial;
     private javax.swing.JPanel pnlInitialContainer;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JSplitPane pnlMainSplit;
+    private javax.swing.JPanel pnlNewProjectDetails;
+    private javax.swing.JPanel pnlNewProjectView;
+    private javax.swing.JPanel pnlNewProjectViewToolBar;
     private javax.swing.JPanel pnlProjectList;
+    private javax.swing.JPanel pnlProjectListCard;
+    private javax.swing.JPanel pnlProjectListMain;
+    private javax.swing.JScrollPane pnlProjectListScroll;
+    private javax.swing.JPanel pnlProjectListToolBar;
     private javax.swing.JPanel pnlSidePane;
     private javax.swing.JPanel pnlSignIn;
     private javax.swing.JPanel pnlSignInContainer;
     private javax.swing.JPanel pnlSignUp;
     private javax.swing.JPanel pnlSignUpContainer;
     private javax.swing.JPanel pnlTitleContainer;
+    private javax.swing.JSeparator sepAccountSetttings;
+    private javax.swing.JSeparator sepNewProjectView;
     private javax.swing.JPasswordField txtConfirmPasswordSignUp;
     private javax.swing.JTextField txtEmailSignUp;
     private javax.swing.JTextField txtFirstNameSignUp;
+    private javax.swing.JTextField txtNewProjectTitle;
+    private javax.swing.JPasswordField txtPasswordSignIn;
     private javax.swing.JPasswordField txtPasswordSignUp;
     private javax.swing.JTextField txtSurnameSignUp;
+    private javax.swing.JTextField txtUsernameSignIn;
     private javax.swing.JTextField txtUsernameSignUp;
+    private javax.swing.JScrollPane txtaNewProjectDescriptionScroll;
+    private javax.swing.JTextArea txtaNewProjectDesriptionMain;
     // End of variables declaration//GEN-END:variables
 }

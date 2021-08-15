@@ -69,4 +69,19 @@ public class TaskManager {
 				}
 		);
 	}
+
+	/**
+	 * Delete a task.
+	 *
+	 * @param task Task to delete.
+	 *
+	 * @return -1 if the task was not deleted.
+	 */
+	public int deleteTask(Task task) {
+		return dbCon.update("DELETE FROM tasks WHERE taskID = ?;",
+				new Object[]{
+					task.getTaskID()
+				}
+		);
+	}
 }

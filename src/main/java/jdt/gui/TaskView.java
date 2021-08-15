@@ -107,6 +107,7 @@ public final class TaskView extends javax.swing.JFrame {
         pnlBottomPane = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -295,12 +296,21 @@ public final class TaskView extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Delete");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlBottomPaneLayout = new javax.swing.GroupLayout(pnlBottomPane);
         pnlBottomPane.setLayout(pnlBottomPaneLayout);
         pnlBottomPaneLayout.setHorizontalGroup(
             pnlBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBottomPaneLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnClose)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSave)
@@ -312,7 +322,8 @@ public final class TaskView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlBottomPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
-                    .addComponent(btnClose))
+                    .addComponent(btnClose)
+                    .addComponent(jButton1))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -364,6 +375,18 @@ public final class TaskView extends javax.swing.JFrame {
 		}
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		if (!(taskManager.deleteTask(task) <= -1)) {
+			context.refreshTaskList();
+			context.repaint();
+			JOptionPane.showMessageDialog(this, "Task Deleted");
+
+			this.dispose();
+		} else {
+			JOptionPane.showMessageDialog(this, "Task Failed to Delete");
+		}
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 	private void tableUpdate(TableModelEvent e) {
 		if (e.getType() == TableModelEvent.UPDATE) {
 			DefaultTableModel model = (DefaultTableModel) tblSubtaskList.getModel();
@@ -397,6 +420,7 @@ public final class TaskView extends javax.swing.JFrame {
     private javax.swing.JRadioButton btnToggleDone;
     private javax.swing.JRadioButton btnToggleTODO;
     private javax.swing.ButtonGroup btngState;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblSubtaskTitle;
     private javax.swing.JPanel pnlBottomPane;
     private javax.swing.JPanel pnlHeaderSubtaskList;
