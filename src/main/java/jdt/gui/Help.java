@@ -22,11 +22,11 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 /**
- * Help page that displays help from text files.
+ * Help page that displays help from markdown files.
  *
  * @author Luke Leppan
  */
-public class Help extends javax.swing.JFrame {
+public final class Help extends javax.swing.JFrame {
 
 	private File[] files;
 
@@ -43,17 +43,20 @@ public class Help extends javax.swing.JFrame {
 		setIconImage(icon.getImage());
 
 		treeFileChooser.setModel(new FilesContentProvider(getClass().getResource("/jdt/help").getPath()));
-		treeFileChooser.addTreeSelectionListener(new TreeSelectionListener() {
-			public void valueChanged(TreeSelectionEvent event) {
-				File file = (File) treeFileChooser.getLastSelectedPathComponent();
-				if (!file.isDirectory()) {
-					setHelpFile(file);
-				}
+		treeFileChooser.addTreeSelectionListener((TreeSelectionEvent event) -> {
+			File file = (File) treeFileChooser.getLastSelectedPathComponent();
+			if (!file.isDirectory()) {
+				setHelpFile(file);
 			}
 		});
 		setHelpFile(new File(getClass().getResource("/jdt/help/1.Welcome.md").getPath()));
 	}
 
+	/**
+	 * Sets the jEditor to render the newly selected Markdown file.
+	 *
+	 * @param file The new file to render
+	 */
 	private void setHelpFile(File file) {
 		this.setTitle("Help - " + file.getName().substring(0, file.getName().length() - 3));
 		String text = "";
@@ -74,8 +77,6 @@ public class Help extends javax.swing.JFrame {
 
 		Document document = parser.parse(text);
 		String html = renderer.render(document);
-
-		System.out.println(style + "<body>" + html + "</body>");
 
 		pnlDocumentViewer.setEditable(false);
 		pnlDocumentViewer.setContentType("text/html");
@@ -128,11 +129,21 @@ public class Help extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 }
 
-class FilesContentProvider implements TreeModel {
+/**
+ * Provides a customized TreeModel to access files.
+ *
+ * @author Luke Leppan
+ */
+final class FilesContentProvider implements TreeModel {
 
-	private File root;
-	private Vector listeners = new Vector();
+	private final File root;
+	private final Vector listeners = new Vector();
 
+	/**
+	 * Create FilesContentProvider
+	 *
+	 * @param rootDirectory The Help directory.
+	 */
 	public FilesContentProvider(String rootDirectory) {
 		root = new File(rootDirectory);
 	}

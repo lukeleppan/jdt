@@ -2,6 +2,11 @@ package jdt.data;
 
 import java.time.LocalDate;
 
+/**
+ * User object to store User data.
+ *
+ * @author Luke Leppan
+ */
 public class User {
 
 	private int userID;
@@ -10,6 +15,15 @@ public class User {
 	private String userFirstName;
 	private String userSurname;
 
+	/**
+	 * Create User
+	 *
+	 * @param userID
+	 * @param userEmail
+	 * @param userDOB
+	 * @param userFirstName
+	 * @param userSurname
+	 */
 	public User(int userID, String userEmail, LocalDate userDOB, String userFirstName, String userSurname) {
 		this.userID = userID;
 		this.userEmail = userEmail;
@@ -18,6 +32,7 @@ public class User {
 		this.userSurname = userSurname;
 	}
 
+	// Getters
 	public int getUserID() {
 		return userID;
 	}
@@ -38,6 +53,7 @@ public class User {
 		return userSurname;
 	}
 
+	// Setters
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}

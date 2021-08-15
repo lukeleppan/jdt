@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import jdt.manager.TaskManager;
 
 /**
- *
+ * TaskView GUI to display task info and subtask list for a task.
  *
  * @author Luke Leppan
  */
@@ -26,6 +26,12 @@ public final class TaskView extends javax.swing.JFrame {
 	private final SubtaskManager subtaskManager;
 	private List<Subtask> subtasks;
 
+	/**
+	 * Create a TaskView GUI.
+	 *
+	 * @param task The task
+	 * @param context the context to refresh
+	 */
 	public TaskView(Task task, ProjectView context) {
 		initComponents();
 		String title = task.getTaskTitle().length() > 30 ? task.getTaskTitle().substring(0, 30) + "..."
@@ -65,6 +71,9 @@ public final class TaskView extends javax.swing.JFrame {
 		this.repaint();
 	}
 
+	/**
+	 * Refresh the subtask list with new data from database.
+	 */
 	public void refreshSubtaskList() {
 		this.subtasks = subtaskManager.getTaskSubtasks(task);
 
@@ -111,12 +120,6 @@ public final class TaskView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        txtTitle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTitleActionPerformed(evt);
-            }
-        });
 
         txtaDescription.setColumns(20);
         txtaDescription.setRows(5);
@@ -350,10 +353,20 @@ public final class TaskView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Close TaskView with out updating.
+	 *
+	 * @param evt
+	 */
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
 		this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
+	/**
+	 * Update task with the new information.
+	 *
+	 * @param evt
+	 */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 		String taskState = (btnToggleTODO.isSelected() ? "TODO"
 				: btnToggleDoing.isSelected() ? "Doing"
@@ -375,6 +388,11 @@ public final class TaskView extends javax.swing.JFrame {
 		}
     }//GEN-LAST:event_btnSaveActionPerformed
 
+	/**
+	 * Delete task.
+	 *
+	 * @param evt
+	 */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 		if (!(taskManager.deleteTask(task) <= -1)) {
 			context.refreshTaskList();
@@ -387,6 +405,11 @@ public final class TaskView extends javax.swing.JFrame {
 		}
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+	/**
+	 * Update database when table information changes.
+	 *
+	 * @param e
+	 */
 	private void tableUpdate(TableModelEvent e) {
 		if (e.getType() == TableModelEvent.UPDATE) {
 			DefaultTableModel model = (DefaultTableModel) tblSubtaskList.getModel();
@@ -403,10 +426,11 @@ public final class TaskView extends javax.swing.JFrame {
 		}
 	}
 
-	private void txtTitleActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtTitleActionPerformed
-		// TODO add your handling code here:
-	}// GEN-LAST:event_txtTitleActionPerformed
-
+	/**
+	 * Open SubtaskAdd for task.
+	 *
+	 * @param evt
+	 */
 	private void btnAddSubtaskActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
 		SubtaskAdd addSubtask = new SubtaskAdd(task, this);
 		addSubtask.setVisible(true);

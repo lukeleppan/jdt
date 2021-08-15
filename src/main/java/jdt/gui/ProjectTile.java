@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
+ * Project Tile panel allow users to open, edit and delete projects.
  *
  * @author lukeleppan
  */
@@ -29,6 +30,12 @@ public class ProjectTile extends javax.swing.JPanel {
 	private MainForm context;
 	private final ProjectManager projectManager;
 
+	/**
+	 * Creates Project tile.
+	 *
+	 * @param project project data.
+	 * @param context context to refresh view.
+	 */
 	public ProjectTile(Project project, MainForm context) {
 
 		initComponents();
@@ -201,17 +208,32 @@ public class ProjectTile extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Cancels project edit
+	 *
+	 * @param evt
+	 */
     private void btnCancelEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEditActionPerformed
 		cardLayout.show(pnlMain, "pnlView");
 		txtfProjectTitleEdit.setText(project.getProjectTitle());
 		txtaProjectDescriptionEdit.setText(project.getProjectDescription());
     }//GEN-LAST:event_btnCancelEditActionPerformed
 
+	/**
+	 * Opens project
+	 *
+	 * @param evt
+	 */
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnOpenActionPerformed
 		ProjectView projectView = new ProjectView(this.project);
 		projectView.setVisible(true);
 	}// GEN-LAST:event_btnOpenActionPerformed
 
+	/**
+	 * Deletes project
+	 *
+	 * @param evt
+	 */
 	private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteActionPerformed
 		if (!(projectManager.deleteProject(project) <= -1)) {
 			context.refreshProjectView();
@@ -223,6 +245,11 @@ public class ProjectTile extends javax.swing.JPanel {
 
 	}// GEN-LAST:event_btnDeleteActionPerformed
 
+	/**
+	 * Saves project edit
+	 *
+	 * @param evt
+	 */
 	private void btnSaveEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSaveEditActionPerformed
 		Project newProject = new Project(
 				project.getProjectID(),
@@ -241,6 +268,11 @@ public class ProjectTile extends javax.swing.JPanel {
 
 	}// GEN-LAST:event_btnSaveEditActionPerformed
 
+	/**
+	 * Opens project edit
+	 *
+	 * @param evt
+	 */
 	private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
 		cardLayout.show(pnlMain, "pnlEdit");
 	}// GEN-LAST:event_btnEditActionPerformed

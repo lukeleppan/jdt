@@ -3,17 +3,26 @@ package jdt.gui;
 import jdt.data.Project;
 import jdt.data.Task;
 import jdt.manager.TaskManager;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+/**
+ * The project view to display tasks
+ *
+ * @author Luke Leppan
+ */
 public final class ProjectView extends javax.swing.JFrame {
 
 	private final Project project;
 	private final TaskManager taskManager;
 
+	/**
+	 * Create project view
+	 *
+	 * @param project project to display.
+	 */
 	public ProjectView(Project project) {
 		initComponents();
 		this.setTitle(project.getProjectTitle());
@@ -30,6 +39,9 @@ public final class ProjectView extends javax.swing.JFrame {
 		this.refreshTaskList();
 	}
 
+	/**
+	 * Refresh the task list with new data from the database.
+	 */
 	public void refreshTaskList() {
 		List<Task> TODOTasks = this.taskManager.getProjectTask(project, "TODO");
 		List<Task> DoingTasks = this.taskManager.getProjectTask(project, "Doing");

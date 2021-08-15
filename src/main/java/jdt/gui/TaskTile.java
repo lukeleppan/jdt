@@ -2,11 +2,22 @@ package jdt.gui;
 
 import jdt.data.Task;
 
-public class TaskTile extends javax.swing.JPanel {
+/**
+ * Panel to render task information to project view.
+ *
+ * @author Luke Leppan
+ */
+public final class TaskTile extends javax.swing.JPanel {
 
-	private Task task;
-	private ProjectView context;
+	private final Task task;
+	private final ProjectView context;
 
+	/**
+	 * Create TaskTile GUI
+	 *
+	 * @param task
+	 * @param context
+	 */
 	public TaskTile(Task task, ProjectView context) {
 		initComponents();
 		this.txtaTitle.setText(task.getTaskTitle());
@@ -14,6 +25,9 @@ public class TaskTile extends javax.swing.JPanel {
 		this.context = context;
 	}
 
+	/**
+	 * Open task view.
+	 */
 	private void openTask() {
 		TaskView taskView = new TaskView(this.task, this.context);
 		taskView.setVisible(true);

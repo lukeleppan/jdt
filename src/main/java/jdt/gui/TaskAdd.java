@@ -12,14 +12,21 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
+ * The GUI to add a new task.
  *
- * @author lukel
+ * @author Luke Leppan
  */
 public class TaskAdd extends javax.swing.JFrame {
 
 	private final Project project;
 	private final ProjectView context;
 
+	/**
+	 * Create TaskAdd GUI
+	 *
+	 * @param project The project to add task to.
+	 * @param context The context to refresh.
+	 */
 	public TaskAdd(Project project, ProjectView context) {
 		initComponents();
 		this.setLocationRelativeTo(null);
@@ -117,6 +124,11 @@ public class TaskAdd extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Add task
+	 *
+	 * @param evt
+	 */
 	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
 		TaskManager taskManager = new TaskManager();
 		if (!(taskManager.createTask(this.project.getProjectID(), this.txtTitle.getText(), this.txtaDescription.getText()) <= -1)) {
