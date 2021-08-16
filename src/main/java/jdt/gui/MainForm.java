@@ -1281,11 +1281,11 @@ public final class MainForm extends javax.swing.JFrame {
 
 		if (txtNewProjectTitle.getText().equals("")) {
 			lblErrorTextNewProject.setText("Please Enter the Project Title");
-		} else if (lblNewProjectDescription.getText().equals("")) {
+		} else if (txtaNewProjectDesriptionMain.getText().equals("")) {
 			lblErrorTextNewProject.setText("Please Enter the Project Description");
-		} else if (txtNewProjectTitle.getText().length() > 100) {
+		} else if (txtNewProjectTitle.getText().length() > 50) {
 			lblErrorTextNewProject.setText("Title is too long");
-		} else if (lblNewProjectDescription.getText().length() > 300) {
+		} else if (txtaNewProjectDesriptionMain.getText().length() > 350) {
 			lblErrorTextNewProject.setText("Desription is too long");
 		} else if (!(projectManager.createProject(txtNewProjectTitle.getText(), txtaNewProjectDesriptionMain.getText(), currentUser) <= -1)) {
 			cardLayoutPV.show(pnlCardPV, "ProjectViewPV");

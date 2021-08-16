@@ -1,6 +1,5 @@
 package jdt.gui;
 
-import java.awt.Dimension;
 import jdt.data.Subtask;
 import jdt.data.Task;
 import jdt.manager.SubtaskManager;
@@ -368,23 +367,33 @@ public final class TaskView extends javax.swing.JFrame {
 	 * @param evt
 	 */
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-		String taskState = (btnToggleTODO.isSelected() ? "TODO"
-				: btnToggleDoing.isSelected() ? "Doing"
-				: "Done");
-
-		Task updatedTask = new Task(
-				this.task.getTaskID(),
-				this.task.getProjectID(),
-				txtTitle.getText(),
-				txtaDescription.getText(),
-				taskState
-		);
-
-		if (!(taskManager.updateTask(updatedTask) <= -1)) {
-			context.refreshTaskList();
-			this.dispose();
+		if (txtTitle.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "Please Enter the Task Title");
+		} else if (txtaDescription.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "Please Enter the Task Description");
+		} else if (txtTitle.getText().length() > 75) {
+			JOptionPane.showMessageDialog(this, "Title is too long");
+		} else if (txtaDescription.getText().length() > 500) {
+			JOptionPane.showMessageDialog(this, "Desription is too long");
 		} else {
-			JOptionPane.showMessageDialog(this, "Failed to Update. Restart program.");
+			String taskState = (btnToggleTODO.isSelected() ? "TODO"
+					: btnToggleDoing.isSelected() ? "Doing"
+					: "Done");
+
+			Task updatedTask = new Task(
+					this.task.getTaskID(),
+					this.task.getProjectID(),
+					txtTitle.getText(),
+					txtaDescription.getText(),
+					taskState
+			);
+
+			if (!(taskManager.updateTask(updatedTask) <= -1)) {
+				context.refreshTaskList();
+				this.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to Update. Restart program.");
+			}
 		}
     }//GEN-LAST:event_btnSaveActionPerformed
 

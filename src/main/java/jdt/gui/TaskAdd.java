@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jdt.gui;
 
 import javax.swing.ImageIcon;
@@ -130,16 +125,26 @@ public class TaskAdd extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
-		TaskManager taskManager = new TaskManager();
-		if (!(taskManager.createTask(this.project.getProjectID(), this.txtTitle.getText(), this.txtaDescription.getText()) <= -1)) {
-			context.refreshTaskList();
-			context.repaint();
-			JOptionPane.showMessageDialog(this, "Task Created.");
+		if (txtTitle.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "Please Enter the Task Title");
+		} else if (txtaDescription.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "Please Enter the Task Description");
+		} else if (txtTitle.getText().length() > 75) {
+			JOptionPane.showMessageDialog(this, "Title is too long");
+		} else if (txtaDescription.getText().length() > 500) {
+			JOptionPane.showMessageDialog(this, "Desription is too long");
 		} else {
-			JOptionPane.showMessageDialog(this, "Failed to Create Task.");
-		}
+			TaskManager taskManager = new TaskManager();
+			if (!(taskManager.createTask(this.project.getProjectID(), this.txtTitle.getText(), this.txtaDescription.getText()) <= -1)) {
+				context.refreshTaskList();
+				context.repaint();
+				JOptionPane.showMessageDialog(this, "Task Created.");
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to Create Task.");
+			}
 
-		this.dispose();
+			this.dispose();
+		}
 	}// GEN-LAST:event_btnAddActionPerformed
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

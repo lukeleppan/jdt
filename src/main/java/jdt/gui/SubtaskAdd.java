@@ -95,15 +95,21 @@ public final class SubtaskAdd extends javax.swing.JFrame {
 	 * @param evt
 	 */
 	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
-		if (!(subtaskManager.createSubtask(task.getTaskID(), txtTitle.getText()) <= -1)) {
-			context.refreshSubtaskList();
-			context.repaint();
-			JOptionPane.showMessageDialog(this, "Subtask Created.");
+		if (txtTitle.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "Please Enter the subtask Title");
+		} else if (txtTitle.getText().length() > 100) {
+			JOptionPane.showMessageDialog(this, "Title is too long");
 		} else {
-			JOptionPane.showMessageDialog(this, "Failed to Create Subtask.");
-		}
+			if (!(subtaskManager.createSubtask(task.getTaskID(), txtTitle.getText()) <= -1)) {
+				context.refreshSubtaskList();
+				context.repaint();
+				JOptionPane.showMessageDialog(this, "Subtask Created.");
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to Create Subtask.");
+			}
 
-		this.dispose();
+			this.dispose();
+		}
 	}// GEN-LAST:event_btnAddActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

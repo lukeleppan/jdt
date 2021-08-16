@@ -1,22 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jdt.gui;
 
-import jdt.gui.MainForm;
 import jdt.data.Project;
 import jdt.manager.ProjectManager;
-import jdt.manager.UserManager;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * Project Tile panel allow users to open, edit and delete projects.
@@ -251,21 +240,29 @@ public class ProjectTile extends javax.swing.JPanel {
 	 * @param evt
 	 */
 	private void btnSaveEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSaveEditActionPerformed
-		Project newProject = new Project(
-				project.getProjectID(),
-				project.getUserID(),
-				txtfProjectTitleEdit.getText(),
-				txtaProjectDescriptionEdit.getText()
-		);
-
-		if (!(projectManager.updateProject(newProject) <= -1)) {
-			context.refreshProjectView();
-			context.repaint();
-			JOptionPane.showMessageDialog(MainForm.pnlCardPV, "Project Updated");
+		if (txtfProjectTitleEdit.getText().length() < 1
+				|| txtfProjectTitleEdit.getText().length() > 50) {
+			JOptionPane.showMessageDialog(this, "Title has Incorrect Length");
+		} else if (txtaProjectDescriptionEdit.getText().length() < 1
+				|| txtaProjectDescriptionTile.getText().length() > 350) {
+			JOptionPane.showMessageDialog(this, "Description has Incorrect Length");
 		} else {
-			JOptionPane.showMessageDialog(MainForm.pnlCardPV, "Project Failed to Update");
-		}
 
+			Project newProject = new Project(
+					project.getProjectID(),
+					project.getUserID(),
+					txtfProjectTitleEdit.getText(),
+					txtaProjectDescriptionEdit.getText()
+			);
+
+			if (!(projectManager.updateProject(newProject) <= -1)) {
+				context.refreshProjectView();
+				context.repaint();
+				JOptionPane.showMessageDialog(MainForm.pnlCardPV, "Project Updated");
+			} else {
+				JOptionPane.showMessageDialog(MainForm.pnlCardPV, "Project Failed to Update");
+			}
+		}
 	}// GEN-LAST:event_btnSaveEditActionPerformed
 
 	/**
