@@ -50,22 +50,25 @@ public final class MainForm extends javax.swing.JFrame {
 	 * Loads Project Components for Project View
 	 */
 	public void refreshProjectView() {
-		pnlProjectListMain.removeAll();
+		pnlProjectListMain.removeAll(); // Remove all old project components
 		pnlProjectListMain.invalidate();
 		pnlProjectListMain.validate();
-		pnlProjectListMain.repaint();
+		pnlProjectListMain.repaint(); // Refresh Components
 		ProjectManager projectManager = new ProjectManager();
 		List<Project> projects = projectManager.getUserProjects(
 				currentUser,
 				txtSearch.getText().equals("Enter search term to search for title") ? "*" : "*" + txtSearch.getText() + "*",
 				(cbOrderBy.getSelectedIndex() == 0 ? "projectTitle" : cbOrderBy.getSelectedIndex() == 1 ? "projectDescription" : "projectID"),
 				cbOrderByDirection.getSelectedIndex() == 0
-		);
+		); // Grab projects from database
+
+		// Set new component parameters for the new data
 		Dimension preferredSize = new Dimension(818, 210 * projects.size() + 10);
 		pnlProjectListMain.setPreferredSize(preferredSize);
 		pnlProjectListScroll.getVerticalScrollBar().setUnitIncrement(16);
 		pnlProjectListScroll.getVerticalScrollBar().setAutoscrolls(false);
 
+		// Add each new project to the list and display them
 		for (int i = 0; i < projects.size(); i++) {
 			Project project = projects.get(i);
 			ProjectTile projectTile = new ProjectTile(project, this);
@@ -79,7 +82,7 @@ public final class MainForm extends javax.swing.JFrame {
 
 		pnlProjectListMain.invalidate();
 		pnlProjectListMain.validate();
-		pnlProjectListMain.repaint();
+		pnlProjectListMain.repaint(); // Refresh Components
 	}
 
 	/**

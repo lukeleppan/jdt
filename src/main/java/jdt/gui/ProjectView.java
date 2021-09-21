@@ -43,21 +43,25 @@ public final class ProjectView extends javax.swing.JFrame {
 	 * Refresh the task list with new data from the database.
 	 */
 	public void refreshTaskList() {
-		List<Task> TODOTasks = this.taskManager.getProjectTask(project, "TODO");
-		List<Task> DoingTasks = this.taskManager.getProjectTask(project, "Doing");
-		List<Task> DoneTasks = this.taskManager.getProjectTask(project, "Done");
+		List<Task> TODOTasks = this.taskManager.getProjectTask(project, "TODO"); // Gather TODO Tasks
+		List<Task> DoingTasks = this.taskManager.getProjectTask(project, "Doing"); // Gather Doing Tasks
+		List<Task> DoneTasks = this.taskManager.getProjectTask(project, "Done"); // Gather Done Tasks
 
 		// TODO List Refresh
-		for (int i = 0; i < pnlTODOList.getComponentCount(); i++) {
+		for (int i = 0; i < pnlTODOList.getComponentCount(); i++) { // remove all items from list
 			if (i > 0) {
 				pnlTODOList.remove(i);
 			}
 		}
 		pnlTODOList.invalidate();
 		pnlTODOList.validate();
-		pnlTODOList.repaint();
+		pnlTODOList.repaint(); //refresh component
+
+		// Set new component parameters for new data
 		Dimension preferredSizeTODO = new Dimension(242, (70 * TODOTasks.size()) + 50);
 		pnlTODOList.setPreferredSize(preferredSizeTODO);
+
+		// Add new tasks to the list
 		for (int i = 0; i < TODOTasks.size(); i++) {
 			Task task = TODOTasks.get(i);
 			TaskTile tile = new TaskTile(task, this);
@@ -70,20 +74,24 @@ public final class ProjectView extends javax.swing.JFrame {
 		}
 		pnlTODOList.invalidate();
 		pnlTODOList.validate();
-		pnlTODOList.repaint();
+		pnlTODOList.repaint();//refresh component
 		// ----------------------------------------------------------------
 
 		// Doing List Refresh
-		for (int i = 0; i < pnlDoingList.getComponentCount(); i++) {
+		for (int i = 0; i < pnlDoingList.getComponentCount(); i++) {// remove all items from list
 			if (i > 0) {
 				pnlDoingList.remove(i);
 			}
 		}
 		pnlDoingList.invalidate();
 		pnlDoingList.validate();
-		pnlDoingList.repaint();
+		pnlDoingList.repaint();//refresh component
+
+		// Set new component parameters for new data
 		Dimension preferredSizeDoing = new Dimension(242, (70 * DoingTasks.size()) + 50);
 		pnlDoingList.setPreferredSize(preferredSizeDoing);
+
+		// Add new tasks to the list
 		for (int i = 0; i < DoingTasks.size(); i++) {
 			Task task = DoingTasks.get(i);
 			TaskTile tile = new TaskTile(task, this);
@@ -96,11 +104,11 @@ public final class ProjectView extends javax.swing.JFrame {
 		}
 		pnlDoingList.invalidate();
 		pnlDoingList.validate();
-		pnlDoingList.repaint();
+		pnlDoingList.repaint();//refresh component
 		// ----------------------------------------------------------------
 
 		// Done List Refresh
-		for (int i = 0; i < pnlDoneList.getComponentCount(); i++) {
+		for (int i = 0; i < pnlDoneList.getComponentCount(); i++) {// remove all items from list
 			if (i > 0) {
 				pnlDoneList.remove(i);
 			}
@@ -108,8 +116,12 @@ public final class ProjectView extends javax.swing.JFrame {
 		pnlDoneList.invalidate();
 		pnlDoneList.validate();
 		pnlDoneList.repaint();
+
+		// Set new component parameters for new data
 		Dimension preferredSizeDone = new Dimension(242, (70 * DoneTasks.size()) + 50);
 		pnlDoneList.setPreferredSize(preferredSizeDone);
+
+		// Add new tasks to the list
 		for (int i = 0; i < DoneTasks.size(); i++) {
 			Task task = DoneTasks.get(i);
 			TaskTile tile = new TaskTile(task, this);
