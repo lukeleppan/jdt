@@ -1177,7 +1177,7 @@ public final class MainForm extends javax.swing.JFrame {
 		String surname = txtSurnameSignUp.getText();
 		String username = txtUsernameSignUp.getText();
 		String email = txtEmailSignUp.getText();
-		LocalDate DOB = dcDOBSignUp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate DOB = dcDOBSignUp.getDate() != null ? dcDOBSignUp.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
 		char[] password = txtPasswordSignUp.getPassword();
 		char[] repeatPassword = txtConfirmPasswordSignUp.getPassword();
 
